@@ -1,0 +1,20 @@
+.header {
+  &__container {
+    display: flex;
+    gap: 44px;
+    flex-direction: column;
+  }
+  &__title {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 120%;
+    color: var(--dark-blue-color);
+  }
+  &__subtitle {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 130%;
+    color: var(--dark-blue-color);
+    opacity: 0.8;
+  }
+}

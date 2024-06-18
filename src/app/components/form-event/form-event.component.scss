@@ -1,0 +1,73 @@
+.form-event {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 780px;
+  &__btns {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+  &__group-sub-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 300;
+    font-size: 18px;
+    color: var(--dark-blue-color);
+    opacity: 0.4;
+  }
+  &__group {
+    display: flex;
+    flex-direction: column;
+  }
+  &__group input, &__group select {
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    height: 80px;
+    font-weight: 300;
+    font-size: 20px;
+    padding: 20px 35px;
+  }
+  &__error {
+    font-weight: 300;
+    font-size: 16px;
+    color: var(--acent-error-color);
+  }
+}
+
+#radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.custom-radio {
+  cursor: pointer;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 24px;
+  font-weight: 400;
+  font-size: 20px;
+  height: 48px;
+  color: var(--dark-blue-color);
+  background-color: var(--gray-color);
+  & input[type='radio'] {
+    display: none;
+  }
+  &__selected {
+    background-color: var(--dark-blue-color);
+    color: var(--light-color);
+  }
+}
+
+
+input.ng-touched.ng-invalid {
+  border: 1px solid var(--acent-error-color) ;
+  background: var(--light-error-color) ;
+}
+
+select.ng-touched.ng-invalid {
+  border: 1px solid var(--acent-error-color) ;
+  background: var(--light-error-color) ;
+}

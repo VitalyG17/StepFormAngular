@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'fonts';
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --light-color: #ffffff;
+  --light-gray-color: #f3f5f8;
+  --gray-color: rgba(84, 94, 118, 0.12);
+  --dark-blue-color: #222733;
+  --violet-color: #9747ff;
+  --acent-error-color:#FF5C00;
+  --light-error-color: rgba(255, 92, 0, 0.1);
+}
+
+body {
+  background: var(--light-color);
+  font-family: 'Lab Grotesque', sans-serif;
+}
