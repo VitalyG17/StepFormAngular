@@ -20,3 +20,19 @@ body {
   background: var(--light-color);
   font-family: 'Lab Grotesque', sans-serif;
 }
+
+.error {
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--acent-error-color);
+}
+
+input.ng-touched.ng-invalid {
+  border: 1px solid var(--acent-error-color) !important;
+  background: var(--light-error-color);
+}
+
+select.ng-touched.ng-invalid {
+  border: 1px solid var(--acent-error-color) !important;
+  background: var(--light-error-color);
+}

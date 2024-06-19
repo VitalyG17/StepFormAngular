@@ -1,0 +1,17 @@
+.contacts {
+  padding: 70px;
+  width: 100%;
+  &__container {
+    background: var(--light-gray-color);
+    border: 1px dashed var(--violet-color);
+    border-radius: 30px;
+    padding: 70px;
+  }
+  &__header {
+    padding: 60px 0 44px 0;
+  }
+  &__main-info{
+    display: flex;
+    gap: 120px;
+  }
+}

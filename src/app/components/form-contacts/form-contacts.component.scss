@@ -1,0 +1,17 @@
+.form-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  &__group input{
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    width: 780px;
+    height: 80px;
+    font-weight: 300;
+    font-size: 20px;
+    padding: 20px 35px;
+    color: var(--dark-blue-color);
+  }
+}
+

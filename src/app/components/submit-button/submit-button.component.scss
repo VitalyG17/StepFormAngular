@@ -8,13 +8,9 @@
       line-height: 190%;
       opacity: 0.5;
       color: var(--dark-blue-color);
-      & u {
-        margin-bottom: 2px;
-        text-decoration-skip-ink: none;
-        text-decoration: underline;
-      }
       & a {
-        text-decoration: none;
+        text-decoration: underline;
+        text-decoration-skip-ink: none;
         color: inherit;
       }
     }

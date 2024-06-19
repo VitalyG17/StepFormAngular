@@ -1,0 +1,13 @@
+<form class="form-contacts" [formGroup]="aboutInfoForm">
+  <div class="form-contacts__group">
+    <input id="name" type="text" [formControlName]="'userName'" placeholder="Ваше имя">
+    <small class="error" *ngIf="aboutInfoForm.controls['userName'].invalid && aboutInfoForm.controls['userName'].touched">Обязательное поле</small>
+  </div>
+  <div class="form-contacts__group">
+    <input id="phoneNumber" type="text" [formControlName]="'phoneNumber'" placeholder="Мобильный телефон">
+    <small class="error" *ngIf="aboutInfoForm.controls['phoneNumber'].invalid && aboutInfoForm.controls['phoneNumber'].touched">Обязательное поле</small>
+  </div>
+  <div class="form-contacts__group">
+    <input id="email" type="text" [formControlName]="'email'" placeholder="Электронная почта">
+  </div>
+</form>

@@ -1,0 +1,50 @@
+// Общие контейнер
+p-steps {
+  display: flex;
+  justify-content: start;
+}
+
+// Расположение заголовков
+p-steps .p-steps-item .p-menuitem-link {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+// Для всех шагов
+p-steps .p-steps-item .p-steps-number {
+  background: var(--gray-color);
+  color: var(--light-color);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+
+// Заголовки шагов
+p-steps .p-steps-item .p-steps-title {
+  font-weight: 500;
+  font-size: 20px;
+  margin-right: 40px;
+}
+
+// Номер активного шага
+p-steps .p-steps-item.p-highlight .p-steps-number {
+  background: var(--dark-blue-color);
+}
+
+// Номер неактивного шага
+p-steps .p-steps-item:not(.p-highlight) .p-steps-number {
+  background: var(--gray-color);
+  color: var(--dark-blue-color);
+  opacity: 0.5
+}
+
+// Заголовок неактивного шага
+p-steps .p-steps-item:not(.p-highlight) .p-steps-title {
+  color: var(----dark-blue-color);
+  opacity: 0.5;
+}

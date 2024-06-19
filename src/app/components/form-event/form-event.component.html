@@ -1,4 +1,5 @@
 <form class="form-event" [formGroup]="eventInfoForm">
+  <span class="form-event__title">Выберите формат мероприятия</span>
   <div class="form-event__group" id="radio-group">
     <div *ngFor="let listEventName of eventName">
       <label class="custom-radio" [class.custom-radio__selected]="listEventName.name === selectedEventName">
@@ -14,19 +15,19 @@
   </div>
   <div class="form-event__group">
     <input id="countGuest" type="text" placeholder="Количество гостей" [formControlName]="'countGuests'">
-    <input id="countGuestRange" type="range" [formControlName]="'countGuests'">
+<!--    <input id="countGuestRange" type="range" [formControlName]="'countGuests'">-->
     <div class="form-event__group-sub-info">
       <span>От 10 человек</span>
       <span>До 100 человек</span>
     </div>
-    <small class="form-event__error" *ngIf="eventInfoForm.controls['countGuests'].invalid && eventInfoForm.controls['countGuests'].touched">Обязательное поле</small>
+    <small class="error" *ngIf="eventInfoForm.controls['countGuests'].invalid && eventInfoForm.controls['countGuests'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
     <input id="date" type="date" placeholder="Дата мероприятия:" [formControlName]="'date'">
-    <small class="form-event__error" *ngIf="eventInfoForm.controls['date'].invalid && eventInfoForm.controls['date'].touched">Обязательное поле</small>
+    <small class="error" *ngIf="eventInfoForm.controls['date'].invalid && eventInfoForm.controls['date'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
-    <select  id="additionService" name="additionService" [formControlName]="'additionService'">
+    <select id="additionService" name="additionService" [formControlName]="'additionService'">
       <option *ngFor="let addService of addService" [value]="addService">{{addService.name}}</option>>
     </select>
   </div>

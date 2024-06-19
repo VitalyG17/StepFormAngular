@@ -14,6 +14,7 @@ import {FormEventComponent} from './components/form-event/form-event.component';
 import {SubmitButtonComponent} from './components/submit-button/submit-button.component';
 import {HttpClientModule} from '@angular/common/http';
 import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
+import { FormContactsComponent } from './components/form-contacts/form-contacts.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {SummaryInfoComponent} from './components/summary-info/summary-info.compo
     FormEventComponent,
     SubmitButtonComponent,
     SummaryInfoComponent,
+    FormContactsComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, StepsModule, ToastModule],
   providers: [],
