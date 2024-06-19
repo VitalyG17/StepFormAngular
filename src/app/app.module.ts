@@ -12,9 +12,8 @@ import {StepperComponent} from './components/stepper/stepper.component';
 import {HeaderComponent} from './components/header/header.component';
 import {FormEventComponent} from './components/form-event/form-event.component';
 import {SubmitButtonComponent} from './components/submit-button/submit-button.component';
-import {ConfedentComponent} from './components/confedent/confedent.component';
-import {PriceInfoComponent} from './components/price-info/price-info.component';
 import {HttpClientModule} from '@angular/common/http';
+import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +24,7 @@ import {HttpClientModule} from '@angular/common/http';
     HeaderComponent,
     FormEventComponent,
     SubmitButtonComponent,
-    ConfedentComponent,
-    PriceInfoComponent,
+    SummaryInfoComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, StepsModule, ToastModule],
   providers: [],

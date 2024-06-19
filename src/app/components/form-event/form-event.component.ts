@@ -15,10 +15,10 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public addService: ServerResponse[] = [];
   protected selectedEventName: string | null = null;
 
-  public eventInfoForm: FormGroup = new FormGroup({
-    formEventName: new FormControl('', Validators.required),
-    countGuests: new FormControl('', Validators.required),
-    date: new FormControl('', Validators.required),
+  protected readonly eventInfoForm: FormGroup = new FormGroup({
+    formEventName: new FormControl(null, Validators.required),
+    countGuests: new FormControl(null, Validators.required),
+    date: new FormControl(null, Validators.required),
     additionService: new FormControl(''),
     menuWishes: new FormControl(''),
   });

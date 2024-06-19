@@ -19,14 +19,14 @@
       <span>От 10 человек</span>
       <span>До 100 человек</span>
     </div>
-    <br><small class="form-event__error" *ngIf="eventInfoForm.controls['countGuests'].invalid && eventInfoForm.controls['countGuests'].touched">Обязательное поле</small>
+    <small class="form-event__error" *ngIf="eventInfoForm.controls['countGuests'].invalid && eventInfoForm.controls['countGuests'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
     <input id="date" type="date" placeholder="Дата мероприятия:" [formControlName]="'date'">
-    <br><small class="form-event__error" *ngIf="eventInfoForm.controls['date'].invalid && eventInfoForm.controls['date'].touched">Обязательное поле</small>
+    <small class="form-event__error" *ngIf="eventInfoForm.controls['date'].invalid && eventInfoForm.controls['date'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
-    <select id="additionService" name="additionService" [formControlName]="'additionService'">
+    <select  id="additionService" name="additionService" [formControlName]="'additionService'">
       <option *ngFor="let addService of addService" [value]="addService">{{addService.name}}</option>>
     </select>
   </div>

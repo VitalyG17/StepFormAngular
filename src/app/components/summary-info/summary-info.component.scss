@@ -1,0 +1,58 @@
+.summary-info {
+  &__container{
+  }
+  &__current-price {
+    .current-price{
+      display: flex;
+      flex-direction: column;
+      &__title {
+        font-weight: 400;
+        font-size: 18px;
+        opacity: 0.4;
+        color: var(--dark-blue-color);
+      }
+      &__total-price {
+        font-weight: 500;
+        font-size: 40px;
+        line-height: 120%;
+        color: var(--dark-blue-color);
+        padding-top: 20px;
+        padding-bottom: 12px;
+      }
+      &__per-person-price{
+        font-weight: 300;
+        font-size: 18px;
+        opacity: 0.8;
+        color: var(--dark-blue-color);
+        padding-bottom: 28px;
+      }
+    }
+  }
+  &__form-data{
+    .form-data{
+      font-weight: 300;
+      font-size: 18px;
+      color: var(--dark-blue-color);
+      &__format, &__count, &__date {
+        display: flex;
+        justify-content: space-between;
+        gap: 141px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--gray-color);
+      }
+      &__this-data {
+        opacity: 0.4;
+      }
+      &__date{
+        border-bottom: none;
+      }
+      &__received-data {
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 100%;
+        color: var(--dark-blue-color);
+        opacity: 1;
+      }
+    }
+  }
+}

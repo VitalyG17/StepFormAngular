@@ -3,11 +3,6 @@
   flex-direction: column;
   gap: 24px;
   max-width: 780px;
-  &__btns {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-  }
   &__group-sub-info {
     display: flex;
     justify-content: space-between;
@@ -40,6 +35,7 @@
   display: flex;
   flex-direction: row;
   gap: 20px;
+  padding-bottom: 32px;
 }
 
 .custom-radio {
@@ -71,3 +67,4 @@ select.ng-touched.ng-invalid {
   border: 1px solid var(--acent-error-color) ;
   background: var(--light-error-color) ;
 }
+
