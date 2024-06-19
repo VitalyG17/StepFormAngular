@@ -27,7 +27,7 @@
   </div>
   <div class="form-event__group">
     <select id="additionService" name="additionService" [formControlName]="'additionService'">
-      <option *ngFor="let listEventName of eventName" [value]="listEventName">{{listEventName}}</option>>
+      <option *ngFor="let addService of addService" [value]="addService">{{addService.name}}</option>>
     </select>
   </div>
   <div class="form-event__group">
