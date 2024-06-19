@@ -14,7 +14,8 @@ import {FormEventComponent} from './components/form-event/form-event.component';
 import {SubmitButtonComponent} from './components/submit-button/submit-button.component';
 import {HttpClientModule} from '@angular/common/http';
 import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
-import { FormContactsComponent } from './components/form-contacts/form-contacts.component';
+import {FormContactsComponent} from './components/form-contacts/form-contacts.component';
+import {PhoneMaskDirective} from './directives/phone-mask.directive';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { FormContactsComponent } from './components/form-contacts/form-contacts.
     SubmitButtonComponent,
     SummaryInfoComponent,
     FormContactsComponent,
+    PhoneMaskDirective,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, StepsModule, ToastModule],
   providers: [],

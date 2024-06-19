@@ -4,7 +4,7 @@
     <small class="error" *ngIf="aboutInfoForm.controls['userName'].invalid && aboutInfoForm.controls['userName'].touched">Обязательное поле</small>
   </div>
   <div class="form-contacts__group">
-    <input id="phoneNumber" type="text" [formControlName]="'phoneNumber'" placeholder="Мобильный телефон">
+    <input id="phoneNumber" type="text" [formControlName]="'phoneNumber'" placeholder="Мобильный телефон" appPhoneMask>
     <small class="error" *ngIf="aboutInfoForm.controls['phoneNumber'].invalid && aboutInfoForm.controls['phoneNumber'].touched">Обязательное поле</small>
   </div>
   <div class="form-contacts__group">

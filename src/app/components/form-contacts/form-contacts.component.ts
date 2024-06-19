@@ -7,9 +7,9 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./form-contacts.component.scss'],
 })
 export class FormContactsComponent {
-  public aboutInfoForm: FormGroup = new FormGroup({
+  protected readonly aboutInfoForm: FormGroup = new FormGroup({
     userName: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', Validators.email),
   });
 }
