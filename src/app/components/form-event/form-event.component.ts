@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ServerResponse} from 'src/app/types/serverResponse';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
-import {Subscription} from 'rxjs';
+import {debounceTime, Subscription} from 'rxjs';
 import {EventInfoForm} from '../../types/eventForm';
 import {FormDataService} from '../../services/form-data.service';
 
@@ -41,9 +41,11 @@ export class FormEventComponent implements OnInit, OnDestroy {
       this.addService = data;
     });
 
-    this.formChangesSubscription = this.eventInfoForm.valueChanges.subscribe((value: EventInfoForm) => {
-      this.formDataService.updateFormData(value);
-    });
+    this.formChangesSubscription = this.eventInfoForm.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe((value: EventInfoForm) => {
+        this.formDataService.updateFormData(value);
+      });
   }
 
   public ngOnDestroy(): void {
@@ -54,6 +56,5 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
   public onRadioChange(selectedValue: string): void {
     this.selectedEventName = selectedValue;
-    console.log(selectedValue);
   }
 }
