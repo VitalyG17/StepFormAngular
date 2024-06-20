@@ -16,6 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
 import {FormContactsComponent} from './components/form-contacts/form-contacts.component';
 import {PhoneMaskDirective} from './directives/phone-mask.directive';
+import { RubCurrencyPipe } from './pipes/rub-currency.pipe';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {PhoneMaskDirective} from './directives/phone-mask.directive';
     SummaryInfoComponent,
     FormContactsComponent,
     PhoneMaskDirective,
+    RubCurrencyPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, StepsModule, ToastModule],
   providers: [],

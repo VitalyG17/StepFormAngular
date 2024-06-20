@@ -3,14 +3,8 @@ import {ServerResponse} from 'src/app/types/serverResponse';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 import {Subscription} from 'rxjs';
-
-interface EventInfoForm {
-  formEventName: FormControl<string | null>;
-  countGuests: FormControl<number | null>;
-  date: FormControl<Date | null>;
-  additionService: FormControl<string | null>;
-  menuWishes: FormControl<string | null>;
-}
+import {EventInfoForm} from '../../types/eventForm';
+import {FormDataService} from '../../services/form-data.service';
 
 @Component({
   selector: 'app-form-event',
@@ -23,7 +17,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public addService: ServerResponse[] = [];
   protected selectedEventName: string | null = null;
 
-  protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
+  protected readonly eventInfoForm: FormGroup = new FormGroup({
     formEventName: new FormControl(null, Validators.required),
     countGuests: new FormControl(null, Validators.required),
     date: new FormControl(null, Validators.required),
@@ -33,8 +27,10 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
   private eventNameSubscription: Subscription = new Subscription();
   private addServiceSubscription: Subscription = new Subscription();
+  private formChangesSubscription: Subscription = new Subscription();
 
   private readonly dataService: HttpService = inject(HttpService);
+  private formDataService: FormDataService = inject(FormDataService);
 
   public ngOnInit(): void {
     this.eventNameSubscription = this.dataService.getEventFormats().subscribe((data: ServerResponse[]) => {
@@ -44,11 +40,16 @@ export class FormEventComponent implements OnInit, OnDestroy {
     this.addServiceSubscription = this.dataService.getAddServices().subscribe((data: ServerResponse[]) => {
       this.addService = data;
     });
+
+    this.formChangesSubscription = this.eventInfoForm.valueChanges.subscribe((value: EventInfoForm) => {
+      this.formDataService.updateFormData(value);
+    });
   }
 
   public ngOnDestroy(): void {
     this.eventNameSubscription.unsubscribe();
     this.addServiceSubscription.unsubscribe();
+    this.formChangesSubscription.unsubscribe();
   }
 
   public onRadioChange(selectedValue: string): void {

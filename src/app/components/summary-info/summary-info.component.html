@@ -3,23 +3,23 @@
     <div class="summary-info__current-price">
       <div class="current-price">
         <span class="current-price__title">Примерная стоимость:</span>
-        <span class="current-price__total-price">150 000 ₽</span>
-        <div class="current-price__per-person-price">5 000₽/чел</div>
+        <span class="current-price__total-price">{{ totalPrice | rubCurrency }}</span>
+        <div class="current-price__per-person-price">{{ onePersonPrice | rubCurrency }}/чел</div>
       </div>
     </div>
     <div class="summary-info__form-data">
       <div class="form-data">
         <div class="form-data__format">
           <span class="form-data__this-data">Формат:</span>
-          <span class="form-data__received-data">Фуршет</span>
+          <span class="form-data__received-data">{{ formState?.formEventName }} </span>
         </div>
         <div class="form-data__count">
           <span class="form-data__this-data">Количество гостей:</span>
-          <span class="form-data__received-data">30</span>
+          <span class="form-data__received-data">{{ formState?.countGuests }}</span>
         </div>
         <div class="form-data__date">
           <span class="form-data__this-data">Дата:</span>
-          <span class="form-data__received-data">19.06.2024</span>
+          <span class="form-data__received-data">{{ (formState?.date)?.toString() | date: 'dd.MM.yyyy' }}</span>
         </div>
       </div>
     </div>
