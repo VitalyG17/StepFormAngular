@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-submit-button',
@@ -7,4 +8,10 @@ import {Component, Input} from '@angular/core';
 })
 export class SubmitButtonComponent {
   @Input() public title: string = 'Продолжить';
+
+  constructor(private router: Router) {}
+
+  public onSubmit(): void {
+    this.router.navigate(['/contacts']);
+  }
 }

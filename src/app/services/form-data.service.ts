@@ -12,5 +12,18 @@ export class FormDataService {
 
   public updateFormData(formData: EventInfoForm): void {
     this.formDataSubject.next(formData);
+    localStorage.setItem('formData', JSON.stringify(formData));
+  }
+
+  public loadFormData(): void {
+    const savedData: string | null = localStorage.getItem('formData');
+    if (savedData) {
+      this.formDataSubject.next(JSON.parse(savedData));
+    }
+  }
+
+  public clearFormData(): void {
+    this.formDataSubject.next(null);
+    localStorage.removeItem('formData');
   }
 }

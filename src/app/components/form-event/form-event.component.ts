@@ -1,10 +1,11 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {ServerResponse} from 'src/app/types/serverResponse';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 import {debounceTime, Subscription} from 'rxjs';
 import {EventInfoForm} from '../../types/eventForm';
 import {FormDataService} from '../../services/form-data.service';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-form-event',
@@ -16,6 +17,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public eventName: ServerResponse[] = [];
   public addService: ServerResponse[] = [];
   protected selectedEventName: string | null = null;
+  @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   protected readonly eventInfoForm: FormGroup = new FormGroup({
     formEventName: new FormControl(null, Validators.required),
@@ -31,6 +33,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
   private readonly dataService: HttpService = inject(HttpService);
   private formDataService: FormDataService = inject(FormDataService);
+  private router: Router = inject(Router);
 
   public ngOnInit(): void {
     this.eventNameSubscription = this.dataService.getEventFormats().subscribe((data: ServerResponse[]) => {
@@ -46,15 +49,38 @@ export class FormEventComponent implements OnInit, OnDestroy {
       .subscribe((value: EventInfoForm) => {
         this.formDataService.updateFormData(value);
       });
+
+    // Сохранение/удаление данных localeStorage
+    this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        if (event.urlAfterRedirects !== '/') {
+          this.formDataService.updateFormData(this.eventInfoForm.value);
+        } else {
+          this.formDataService.clearFormData();
+        }
+      }
+    });
   }
 
   public ngOnDestroy(): void {
     this.eventNameSubscription.unsubscribe();
     this.addServiceSubscription.unsubscribe();
     this.formChangesSubscription.unsubscribe();
+    this.submitForm();
   }
 
   public onRadioChange(selectedValue: string): void {
     this.selectedEventName = selectedValue;
+  }
+
+  // Проверка заполненности формы
+  public submitForm(): void {
+    if (this.eventInfoForm.valid) {
+      this.formSubmitted.emit(true);
+      console.log('Форма корректна');
+    } else {
+      console.error('Форма некорректна');
+      this.formSubmitted.emit(false);
+    }
   }
 }

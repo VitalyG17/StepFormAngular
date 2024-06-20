@@ -17,6 +17,7 @@ export class SummaryInfoComponent implements OnInit, OnDestroy {
   private formDataService: FormDataService = inject(FormDataService);
 
   public ngOnInit(): void {
+    this.formDataService.loadFormData();
     this.formStateSubscription = this.formDataService.formData$.subscribe((state: EventInfoForm | null): void => {
       this.formState = state;
       this.updateTotalPrice();
