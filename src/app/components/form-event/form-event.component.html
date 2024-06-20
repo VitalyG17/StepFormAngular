@@ -28,9 +28,25 @@
     <small class="error" *ngIf="eventInfoForm.controls['date'].invalid && eventInfoForm.controls['date'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
-    <select id="additionService" name="additionService" [formControlName]="'additionService'">
-      <option *ngFor="let addService of addService" [value]="addService">{{addService.name}}</option>>
-    </select>
+    <div class="dropdown" (click)="toggleDropdown()">
+      <button class="dropdown-toggle" type="button" id="additionServiceDropdown" aria-expanded="false">
+        Дополнительные услуги: {{ getSelectedServicesText() }}
+        <span class="dropdown-icon">
+          <svg *ngIf="!dropdownOpen" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.1429 5.71436L10 12.8572L2.85718 5.71436" stroke="#545E76" stroke-width="3" stroke-linejoin="round" />
+          </svg>
+          <svg *ngIf="dropdownOpen" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.85711 14.2856L9.99996 7.14279L17.1428 14.2856" stroke="#545E76" stroke-width="3" stroke-linejoin="round" />
+          </svg>
+        </span>
+      </button>
+      <ul class="dropdown-menu" [class.show]="dropdownOpen" aria-labelledby="additionServiceDropdown">
+        <li *ngFor="let service of addService" (click)="onServiceSelect($event, service.name)">
+          <span>{{ service.name }}</span>
+        </li>
+      </ul>
+    </div>
+    <small class="error" *ngIf="eventInfoForm.controls['additionService'].invalid && eventInfoForm.controls['additionService'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
     <input id="wishes" type="text" placeholder="Напишите пожелания по меню" [formControlName] = "'menuWishes'">

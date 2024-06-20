@@ -18,12 +18,14 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public addService: ServerResponse[] = [];
   protected selectedEventName: string | null = null;
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public dropdownOpen: boolean = false; // Для управления состоянием выпадающего списка
+  public selectedServices: string[] = []; // Хранение выбранных услуг
 
   protected readonly eventInfoForm: FormGroup = new FormGroup({
     formEventName: new FormControl(null, Validators.required),
     countGuests: new FormControl(null, Validators.required),
     date: new FormControl(null, Validators.required),
-    additionService: new FormControl(''),
+    additionService: new FormControl([]),
     menuWishes: new FormControl(''),
   });
 
@@ -82,5 +84,33 @@ export class FormEventComponent implements OnInit, OnDestroy {
       console.error('Форма некорректна');
       this.formSubmitted.emit(false);
     }
+  }
+
+  public onServiceSelect(event: Event, serviceName: string): void {
+    event.stopPropagation();
+    const selectedServices: string[] = this.eventInfoForm.get('additionService')?.value ?? [];
+
+    const index: number = selectedServices.indexOf(serviceName);
+    if (index > -1) {
+      selectedServices.splice(index, 1);
+    } else {
+      selectedServices.push(serviceName);
+    }
+
+    this.eventInfoForm.get('additionService')?.setValue(selectedServices);
+    this.selectedServices = selectedServices;
+  }
+
+  public toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  public getSelectedServicesText(): string {
+    if (this.selectedServices.length > 2) {
+      const visibleServices: string[] = this.selectedServices.slice(0, 2);
+      const remainingCount: number = this.selectedServices.length - 2;
+      return `${visibleServices.join(', ')} +${remainingCount}`;
+    }
+    return this.selectedServices.join(', ') || 'Выберите дополнительные услуги';
   }
 }
