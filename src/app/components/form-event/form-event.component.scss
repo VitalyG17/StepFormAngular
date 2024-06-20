@@ -36,6 +36,9 @@
     font-size: 20px;
     padding: 20px 35px;
     width: 780px;
+    &:focus {
+      border: 1px solid var(--focus-input-color);
+    }
   }
 
   #radio-group {
@@ -66,4 +69,10 @@
     }
   }
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
 

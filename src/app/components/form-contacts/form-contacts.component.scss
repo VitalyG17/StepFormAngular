@@ -12,6 +12,8 @@
     font-size: 20px;
     padding: 20px 35px;
     color: var(--dark-blue-color);
+    &:focus {
+      border: 1px solid var(--focus-input-color);
+    }
   }
 }
-

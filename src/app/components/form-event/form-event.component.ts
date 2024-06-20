@@ -4,6 +4,14 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 import {Subscription} from 'rxjs';
 
+interface EventInfoForm {
+  formEventName: FormControl<string | null>;
+  countGuests: FormControl<number | null>;
+  date: FormControl<Date | null>;
+  additionService: FormControl<string | null>;
+  menuWishes: FormControl<string | null>;
+}
+
 @Component({
   selector: 'app-form-event',
   templateUrl: './form-event.component.html',
@@ -15,7 +23,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public addService: ServerResponse[] = [];
   protected selectedEventName: string | null = null;
 
-  protected readonly eventInfoForm: FormGroup = new FormGroup({
+  protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
     formEventName: new FormControl(null, Validators.required),
     countGuests: new FormControl(null, Validators.required),
     date: new FormControl(null, Validators.required),
@@ -45,5 +53,6 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
   public onRadioChange(selectedValue: string): void {
     this.selectedEventName = selectedValue;
+    console.log(selectedValue);
   }
 }

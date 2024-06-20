@@ -12,9 +12,10 @@
         <span>{{ listEventName.name }}</span>
       </label>
     </div>
+    <small class="error" *ngIf="eventInfoForm.controls['formEventName'].invalid && eventInfoForm.controls['formEventName'].touched">Обязательное поле</small>
   </div>
   <div class="form-event__group">
-    <input id="countGuest" type="text" placeholder="Количество гостей" [formControlName]="'countGuests'">
+    <input id="countGuest" type="number" placeholder="Количество гостей" [formControlName]="'countGuests'" min="10" max="100">
 <!--    <input id="countGuestRange" type="range" [formControlName]="'countGuests'" min="10" max="100" step="1">-->
     <div class="form-event__group-sub-info">
       <span>От 10 человек</span>
