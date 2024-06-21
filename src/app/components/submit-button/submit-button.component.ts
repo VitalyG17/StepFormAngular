@@ -12,6 +12,12 @@ export class SubmitButtonComponent {
   constructor(private router: Router) {}
 
   public onSubmit(): void {
-    this.router.navigate(['/contacts']);
+    const currentUrl: string = this.router.url;
+    if (currentUrl === '/') {
+      this.router.navigate(['/contacts']);
+    } else if (currentUrl === '/contacts') {
+      alert('Спасибо за заявку!');
+      this.router.navigate(['/']);
+    }
   }
 }

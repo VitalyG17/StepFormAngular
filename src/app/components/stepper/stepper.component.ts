@@ -1,4 +1,5 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute, UrlSegment} from '@angular/router';
 
 interface Items {
   label: string;
@@ -10,7 +11,7 @@ interface Items {
   styleUrls: ['./stepper.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class StepperComponent {
+export class StepperComponent implements OnInit {
   public activeIndex: number = 0;
 
   public items: Items[] = [
@@ -18,7 +19,13 @@ export class StepperComponent {
     {label: 'Контакты', completed: false},
   ];
 
-  protected setActiveIndex(): void {
-    this.activeIndex = this.activeIndex === 0 ? 1 : 0;
+  constructor(private route: ActivatedRoute) {}
+
+  public ngOnInit(): void {
+    this.route.url.subscribe((segments: UrlSegment[]): void => {
+      if (segments.length > 0 && segments[0].path === 'contacts') {
+        this.activeIndex = 1;
+      }
+    });
   }
 }
