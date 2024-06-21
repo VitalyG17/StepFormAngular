@@ -5,4 +5,6 @@ import {Component} from '@angular/core';
   templateUrl: './about-event.component.html',
   styleUrls: ['./about-event.component.scss'],
 })
-export class AboutEventComponent {}
+export class AboutEventComponent {
+  public isFormValid: boolean = false;
+}

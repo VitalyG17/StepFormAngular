@@ -50,6 +50,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(500))
       .subscribe((value: EventInfoForm) => {
         this.formDataService.updateFormData(value);
+        this.formSubmitted.emit(this.eventInfoForm.valid);
       });
 
     // Сохранение/удаление данных localeStorage

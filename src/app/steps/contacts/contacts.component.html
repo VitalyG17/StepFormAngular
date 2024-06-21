@@ -7,11 +7,11 @@
       <app-header [title]="'Расскажите о себе'"></app-header>
     </div>
     <div class="contacts__main-info">
-      <app-form-contacts></app-form-contacts>
+      <app-form-contacts (formSubmitted)="isFormValid = $event"></app-form-contacts>
       <app-summary-info></app-summary-info>
     </div>
     <div class="submit-form">
-      <app-submit-button [title]="'Отправить заявку'"></app-submit-button>
+      <app-submit-button [title]="'Отправить заявку'" [isFormValid]="isFormValid"></app-submit-button>
     </div>
   </div>
 </div>
