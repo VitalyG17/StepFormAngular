@@ -33,5 +33,6 @@ export class SummaryInfoComponent implements OnInit, OnDestroy {
     this.formState
       ? (this.totalPrice = Number(this.formState.countGuests) * this.onePersonPrice)
       : (this.totalPrice = 0);
+    if (this.totalPrice < 0) this.totalPrice = 0;
   }
 }

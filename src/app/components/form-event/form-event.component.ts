@@ -18,12 +18,12 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public addService: ServerResponse[] = [];
   protected selectedEventName: string | null = null;
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public dropdownOpen: boolean = false; // Для управления состоянием выпадающего списка
-  public selectedServices: string[] = []; // Хранение выбранных услуг
+  public dropdownOpen: boolean = false;
+  public selectedServices: string[] = [];
 
   protected readonly eventInfoForm: FormGroup = new FormGroup({
     formEventName: new FormControl(null, Validators.required),
-    countGuests: new FormControl(null, Validators.required),
+    countGuests: new FormControl(null, [Validators.required, Validators.min(10), Validators.max(100)]),
     date: new FormControl(null, Validators.required),
     additionService: new FormControl([]),
     menuWishes: new FormControl(''),
@@ -111,6 +111,6 @@ export class FormEventComponent implements OnInit, OnDestroy {
       const remainingCount: number = this.selectedServices.length - 2;
       return `${visibleServices.join(', ')} +${remainingCount}`;
     }
-    return this.selectedServices.join(', ') || 'Выберите дополнительные услуги';
+    return this.selectedServices.join(', ');
   }
 }
