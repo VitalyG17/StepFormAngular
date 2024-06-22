@@ -4,8 +4,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {StepsModule} from 'primeng/steps';
-import {ToastModule} from 'primeng/toast';
 import {AboutEventComponent} from './steps/about-event/about-event.component';
 import {ContactsComponent} from './steps/contacts/contacts.component';
 import {StepperComponent} from './components/stepper/stepper.component';
@@ -17,6 +15,7 @@ import {SummaryInfoComponent} from './components/summary-info/summary-info.compo
 import {FormContactsComponent} from './components/form-contacts/form-contacts.component';
 import {PhoneMaskDirective} from './directives/phone-mask.directive';
 import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
+import {FormDataService} from './services/form-data.service';
 
 @NgModule({
   declarations: [
@@ -32,8 +31,8 @@ import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
     PhoneMaskDirective,
     RubCurrencyPipe,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, StepsModule, ToastModule],
-  providers: [],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
+  providers: [FormDataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

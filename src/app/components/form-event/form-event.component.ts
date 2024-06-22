@@ -5,7 +5,6 @@ import {HttpService} from '../../services/http.service';
 import {debounceTime, Subscription} from 'rxjs';
 import {EventInfoForm} from '../../types/eventForm';
 import {FormDataService} from '../../services/form-data.service';
-import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-form-event',
@@ -35,7 +34,6 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
   private readonly dataService: HttpService = inject(HttpService);
   private formDataService: FormDataService = inject(FormDataService);
-  private router: Router = inject(Router);
 
   public ngOnInit(): void {
     this.eventNameSubscription = this.dataService.getEventFormats().subscribe((data: ServerResponse[]) => {
@@ -52,17 +50,6 @@ export class FormEventComponent implements OnInit, OnDestroy {
         this.formDataService.updateFormData(value);
         this.formSubmitted.emit(this.eventInfoForm.valid);
       });
-
-    // Сохранение/удаление данных localeStorage
-    this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationEnd) {
-        if (event.urlAfterRedirects !== '/') {
-          this.formDataService.updateFormData(this.eventInfoForm.value);
-        } else {
-          this.formDataService.clearFormData();
-        }
-      }
-    });
   }
 
   public ngOnDestroy(): void {
@@ -90,13 +77,8 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public onServiceSelect(event: Event, serviceName: string): void {
     event.stopPropagation();
     const selectedServices: string[] = this.eventInfoForm.get('additionService')?.value ?? [];
-
     const index: number = selectedServices.indexOf(serviceName);
-    if (index > -1) {
-      selectedServices.splice(index, 1);
-    } else {
-      selectedServices.push(serviceName);
-    }
+    index > -1 ? selectedServices.splice(index, 1) : selectedServices.push(serviceName);
 
     this.eventInfoForm.get('additionService')?.setValue(selectedServices);
     this.selectedServices = selectedServices;

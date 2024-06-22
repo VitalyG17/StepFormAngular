@@ -1,50 +1,44 @@
-// Общие контейнер
-p-steps {
+.stepper {
   display: flex;
   justify-content: start;
+  &__items {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+  &__item {
+    background: var(--gray-color);
+    color: var(--light-color);
+    border-radius: 50%;
+    border: none;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    & .btn-number {
+      font-weight: 500;
+      font-size: 20px;
+      opacity: 0.5;
+      color: var(--dark-blue-color);
+    }
+    &.active .btn-number {
+      color: var(--light-color);
+      opacity: 1;
+    }
+    &.active {
+      background: var(--dark-blue-color);
+    }
+  }
 }
 
-// Расположение заголовков
-p-steps .p-steps-item .p-menuitem-link {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-}
-
-// Для всех шагов
-p-steps .p-steps-item .p-steps-number {
-  background: var(--gray-color);
-  color: var(--light-color);
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20px;
-}
-
-// Заголовки шагов
-p-steps .p-steps-item .p-steps-title {
+.stepper__item-label {
   font-weight: 500;
   font-size: 20px;
   margin-right: 40px;
-}
-
-// Номер активного шага
-p-steps .p-steps-item.p-highlight .p-steps-number {
-  background: var(--dark-blue-color);
-}
-
-// Номер неактивного шага
-p-steps .p-steps-item:not(.p-highlight) .p-steps-number {
-  background: var(--gray-color);
-  color: var(--dark-blue-color);
-  opacity: 0.5
-}
-
-// Заголовок неактивного шага
-p-steps .p-steps-item:not(.p-highlight) .p-steps-title {
-  color: var(----dark-blue-color);
-  opacity: 0.5;
+  &.inactive {
+    color: var(--dark-blue-color);
+    opacity: 0.5;
+  }
 }
