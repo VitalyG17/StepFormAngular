@@ -5,4 +5,10 @@ import {Component} from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {}
+export class AppComponent {
+  protected currentView: string = 'about';
+
+  public switchView(): void {
+    this.currentView = this.currentView === 'about' ? 'contacts' : 'about';
+  }
+}

@@ -5,7 +5,6 @@ import {HttpService} from '../../services/http.service';
 import {debounceTime, Subscription} from 'rxjs';
 import {EventInfoForm} from '../../types/eventForm';
 import {FormDataService} from '../../services/form-data.service';
-import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-form-event',
@@ -20,8 +19,10 @@ export class FormEventComponent implements OnInit, OnDestroy {
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
   public dropdownOpen: boolean = false;
   public selectedServices: string[] = [];
+  public selectedEventCost: number | null = null;
+  public totalAdditionalServicesCost: number = 0;
 
-  protected readonly eventInfoForm: FormGroup = new FormGroup({
+  protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
     formEventName: new FormControl(null, Validators.required),
     countGuests: new FormControl(null, [Validators.required, Validators.min(10), Validators.max(100)]),
     date: new FormControl(null, Validators.required),
@@ -32,10 +33,11 @@ export class FormEventComponent implements OnInit, OnDestroy {
   private eventNameSubscription: Subscription = new Subscription();
   private addServiceSubscription: Subscription = new Subscription();
   private formChangesSubscription: Subscription = new Subscription();
+  private eventNameValueChangesSubscription: Subscription | undefined = new Subscription();
+  private additionServiceValueChangesSubscription: Subscription | undefined = new Subscription();
 
   private readonly dataService: HttpService = inject(HttpService);
   private formDataService: FormDataService = inject(FormDataService);
-  private router: Router = inject(Router);
 
   public ngOnInit(): void {
     this.eventNameSubscription = this.dataService.getEventFormats().subscribe((data: ServerResponse[]) => {
@@ -48,27 +50,46 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
     this.formChangesSubscription = this.eventInfoForm.valueChanges
       .pipe(debounceTime(500))
-      .subscribe((value: EventInfoForm) => {
+      .subscribe((value: any): void => {
         this.formDataService.updateFormData(value);
         this.formSubmitted.emit(this.eventInfoForm.valid);
       });
 
-    // Сохранение/удаление данных localeStorage
-    this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationEnd) {
-        if (event.urlAfterRedirects !== '/') {
-          this.formDataService.updateFormData(this.eventInfoForm.value);
+    // Подписка изменения formEventName для обновления стоимости
+    this.eventNameValueChangesSubscription = this.eventInfoForm
+      .get('formEventName')
+      ?.valueChanges.subscribe((eventName: string | null): void => {
+        const selectedEvent: ServerResponse | undefined = this.eventName.find(
+          (event: ServerResponse): boolean => event.name === eventName,
+        );
+        if (selectedEvent) {
+          this.selectedEventCost = selectedEvent.costPerPerson;
+          this.formDataService.updateEventCost(this.selectedEventCost);
         } else {
-          this.formDataService.clearFormData();
+          this.selectedEventCost = null;
+          this.formDataService.updateEventCost(null);
         }
-      }
-    });
+      });
+
+    // Подписка обновления общей стоимости доп. услуг
+    this.additionServiceValueChangesSubscription = this.eventInfoForm
+      .get('additionService')
+      ?.valueChanges.subscribe((selectedServices: string[] | null): void => {
+        this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
+        this.formDataService.updateAdditionalServicesCost(this.totalAdditionalServicesCost);
+      });
   }
 
   public ngOnDestroy(): void {
     this.eventNameSubscription.unsubscribe();
     this.addServiceSubscription.unsubscribe();
     this.formChangesSubscription.unsubscribe();
+    if (this.eventNameValueChangesSubscription) {
+      this.eventNameValueChangesSubscription.unsubscribe();
+    }
+    if (this.additionServiceValueChangesSubscription) {
+      this.additionServiceValueChangesSubscription.unsubscribe();
+    }
     this.submitForm();
   }
 
@@ -80,9 +101,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public submitForm(): void {
     if (this.eventInfoForm.valid) {
       this.formSubmitted.emit(true);
-      console.log('Форма корректна');
     } else {
-      console.error('Форма некорректна');
       this.formSubmitted.emit(false);
     }
   }
@@ -90,13 +109,8 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public onServiceSelect(event: Event, serviceName: string): void {
     event.stopPropagation();
     const selectedServices: string[] = this.eventInfoForm.get('additionService')?.value ?? [];
-
     const index: number = selectedServices.indexOf(serviceName);
-    if (index > -1) {
-      selectedServices.splice(index, 1);
-    } else {
-      selectedServices.push(serviceName);
-    }
+    index > -1 ? selectedServices.splice(index, 1) : selectedServices.push(serviceName);
 
     this.eventInfoForm.get('additionService')?.setValue(selectedServices);
     this.selectedServices = selectedServices;
@@ -113,5 +127,18 @@ export class FormEventComponent implements OnInit, OnDestroy {
       return `${visibleServices.join(', ')} +${remainingCount}`;
     }
     return this.selectedServices.join(', ');
+  }
+
+  // Подсчет стоимости дополнительных услуг
+  private calculateTotalAdditionalServicesCost(selectedServices: string[] | null): number {
+    if (selectedServices === null) {
+      return 0;
+    }
+    return selectedServices.reduce((total: number, serviceName: string): number => {
+      const service: ServerResponse | undefined = this.addService.find(
+        (service: ServerResponse): boolean => service.name === serviceName,
+      );
+      return service ? total + service.cost : total;
+    }, 0);
   }
 }

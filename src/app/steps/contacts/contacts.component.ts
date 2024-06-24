@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-contacts',
@@ -7,4 +7,5 @@ import {Component} from '@angular/core';
 })
 export class ContactsComponent {
   public isFormValid: boolean = false;
+  @Output() public switchView: EventEmitter<void> = new EventEmitter<void>();
 }

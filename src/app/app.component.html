@@ -1,3 +1,8 @@
-<div>
-  <router-outlet></router-outlet>
-</div>
+<ng-container [ngSwitch]="currentView">
+  <ng-container *ngSwitchCase="'about'">
+    <app-about-event (switchView)="switchView()"></app-about-event>
+  </ng-container>
+  <ng-container *ngSwitchCase="'contacts'">
+    <app-contacts (switchView)="switchView()"></app-contacts>
+  </ng-container>
+</ng-container>

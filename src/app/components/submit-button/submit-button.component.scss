@@ -8,6 +8,8 @@
       line-height: 190%;
       opacity: 0.5;
       color: var(--dark-blue-color);
+      display: block;
+      max-width: 35%;
       & a {
         text-decoration: underline;
         text-decoration-skip-ink: none;
