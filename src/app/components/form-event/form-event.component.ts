@@ -50,7 +50,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
     this.formChangesSubscription = this.eventInfoForm.valueChanges
       .pipe(debounceTime(500))
-      .subscribe((value: EventInfoForm) => {
+      .subscribe((value: EventInfoForm): void => {
         this.formDataService.updateFormData(value);
         this.formSubmitted.emit(this.eventInfoForm.valid);
       });
@@ -64,18 +64,19 @@ export class FormEventComponent implements OnInit, OnDestroy {
         );
         if (selectedEvent) {
           this.selectedEventCost = selectedEvent.costPerPerson;
+          this.formDataService.updateEventCost(this.selectedEventCost);
         } else {
           this.selectedEventCost = null;
+          this.formDataService.updateEventCost(null);
         }
-        console.log(this.selectedEventCost);
       });
 
     // Подписка обновления общей стоимости доп. услуг
     this.additionServiceValueChangesSubscription = this.eventInfoForm
       .get('additionService')
-      ?.valueChanges.subscribe((selectedServices: string[]) => {
+      ?.valueChanges.subscribe((selectedServices: string[]): void => {
         this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
-        console.log('Цена доп.услуг: ', this.totalAdditionalServicesCost);
+        this.formDataService.updateAdditionalServicesCost(this.totalAdditionalServicesCost);
       });
   }
 
@@ -100,9 +101,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public submitForm(): void {
     if (this.eventInfoForm.valid) {
       this.formSubmitted.emit(true);
-      console.log('Форма корректна');
     } else {
-      console.error('Форма некорректна');
       this.formSubmitted.emit(false);
     }
   }

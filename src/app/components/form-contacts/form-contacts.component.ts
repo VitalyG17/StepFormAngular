@@ -25,7 +25,7 @@ export class FormContactsComponent implements OnInit, OnDestroy {
   private formChangesSubscription: Subscription = new Subscription();
 
   public ngOnInit(): void {
-    this.formChangesSubscription = this.aboutInfoForm.valueChanges.subscribe(() => {
+    this.formChangesSubscription = this.aboutInfoForm.valueChanges.subscribe((): void => {
       this.formSubmitted.emit(this.aboutInfoForm.valid);
     });
   }
@@ -34,5 +34,6 @@ export class FormContactsComponent implements OnInit, OnDestroy {
     if (this.formChangesSubscription) {
       this.formChangesSubscription.unsubscribe();
     }
+    alert('Спасибо за заявку!');
   }
 }

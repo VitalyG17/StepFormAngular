@@ -8,7 +8,6 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class SubmitButtonComponent {
   @Input() public title: string = 'Продолжить';
   @Input() public isFormValid: boolean = false;
-
   @Output() public switchView: EventEmitter<void> = new EventEmitter<void>();
 
   public onSubmit(): void {
