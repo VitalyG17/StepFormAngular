@@ -11,7 +11,7 @@
       <app-summary-info></app-summary-info>
     </div>
     <div class="submit-form">
-      <app-submit-button [isFormValid]="isFormValid"></app-submit-button>
+      <app-submit-button [isFormValid]="isFormValid" (switchView)="switchView.emit()"></app-submit-button>
     </div>
   </div>
 </div>

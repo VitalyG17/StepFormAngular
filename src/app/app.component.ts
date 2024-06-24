@@ -7,4 +7,8 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
   protected currentView: string = 'about';
+
+  public switchView(): void {
+    this.currentView = this.currentView === 'about' ? 'contacts' : 'about';
+  }
 }
