@@ -22,7 +22,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
   public selectedEventCost: number | null = null;
   public totalAdditionalServicesCost: number = 0;
 
-  protected readonly eventInfoForm: FormGroup = new FormGroup({
+  protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
     formEventName: new FormControl(null, Validators.required),
     countGuests: new FormControl(null, [Validators.required, Validators.min(10), Validators.max(100)]),
     date: new FormControl(null, Validators.required),
@@ -50,7 +50,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
 
     this.formChangesSubscription = this.eventInfoForm.valueChanges
       .pipe(debounceTime(500))
-      .subscribe((value: EventInfoForm): void => {
+      .subscribe((value: any): void => {
         this.formDataService.updateFormData(value);
         this.formSubmitted.emit(this.eventInfoForm.valid);
       });
@@ -74,7 +74,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
     // Подписка обновления общей стоимости доп. услуг
     this.additionServiceValueChangesSubscription = this.eventInfoForm
       .get('additionService')
-      ?.valueChanges.subscribe((selectedServices: string[]): void => {
+      ?.valueChanges.subscribe((selectedServices: string[] | null): void => {
         this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
         this.formDataService.updateAdditionalServicesCost(this.totalAdditionalServicesCost);
       });
@@ -130,7 +130,10 @@ export class FormEventComponent implements OnInit, OnDestroy {
   }
 
   // Подсчет стоимости дополнительных услуг
-  private calculateTotalAdditionalServicesCost(selectedServices: string[]): number {
+  private calculateTotalAdditionalServicesCost(selectedServices: string[] | null): number {
+    if (selectedServices === null) {
+      return 0;
+    }
     return selectedServices.reduce((total: number, serviceName: string): number => {
       const service: ServerResponse | undefined = this.addService.find(
         (service: ServerResponse): boolean => service.name === serviceName,

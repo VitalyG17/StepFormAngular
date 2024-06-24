@@ -1,8 +1,18 @@
 <div class="stepper">
   <div class="stepper__items">
-    <button id="fist-btn" class="stepper__item active"><span class="btn-number">1</span></button>
-    <label for="fist-btn" class="stepper__item-label">О мероприятии</label>
-    <button id="second-btn" class="stepper__item inactive"><span class="btn-number">2</span></button>
-    <label for="second-btn" class="stepper__item-label inactive">Контакты</label>
+    <ng-container *ngFor="let item of items; let i = index">
+      <button
+        [id]="'step-' + i"
+        class="stepper__item"
+        [ngClass]="{active: item.completed, inactive: !item.completed}">
+        <span class="btn-number">{{ i + 1 }}</span>
+      </button>
+      <label
+        [for]="'step-' + i"
+        class="stepper__item-label"
+        [ngClass]="{inactive: !item.completed}">
+        {{ item.label }}
+      </label>
+    </ng-container>
   </div>
 </div>
