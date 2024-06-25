@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject, takeUntil} from 'rxjs';
 
 interface AboutInfoForm {
   userName: FormControl<string | null>;
@@ -22,16 +22,17 @@ export class FormContactsComponent implements OnInit, OnDestroy {
     email: new FormControl(null, Validators.email),
   });
 
-  private formChangesSubscription: Subscription = new Subscription();
+  private destroy$: Subject<void> = new Subject<void>();
 
   public ngOnInit(): void {
-    this.formChangesSubscription = this.aboutInfoForm.valueChanges.subscribe((): void => {
+    this.aboutInfoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.formSubmitted.emit(this.aboutInfoForm.valid);
     });
   }
 
-  public ngOnDestroy(): void {
-    this.formChangesSubscription.unsubscribe();
+  public ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     alert('Спасибо за заявку!');
   }
 }

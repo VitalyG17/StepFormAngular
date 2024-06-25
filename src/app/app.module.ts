@@ -17,6 +17,7 @@ import {PhoneMaskDirective} from './directives/phone-mask.directive';
 import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
 import {FormDataService} from './services/form-data.service';
 import {NgOptimizedImage} from '@angular/common';
+import {EventFormatService} from './services/event-format.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {NgOptimizedImage} from '@angular/common';
     RubCurrencyPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgOptimizedImage],
-  providers: [FormDataService],
+  providers: [FormDataService, EventFormatService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

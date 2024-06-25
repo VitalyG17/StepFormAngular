@@ -2,9 +2,10 @@ import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from '@angul
 import {ServerResponse} from 'src/app/types/serverResponse';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
-import {debounceTime, Subscription} from 'rxjs';
+import {debounceTime, Subject} from 'rxjs';
 import {EventInfoForm} from '../../types/eventForm';
 import {FormDataService} from '../../services/form-data.service';
+import {EventFormatService} from '../../services/event-format.service';
 
 @Component({
   selector: 'app-form-event',
@@ -30,75 +31,58 @@ export class FormEventComponent implements OnInit, OnDestroy {
     menuWishes: new FormControl(''),
   });
 
-  private eventNameSubscription: Subscription = new Subscription();
-  private addServiceSubscription: Subscription = new Subscription();
-  private formChangesSubscription: Subscription = new Subscription();
-  private eventNameValueChangesSubscription: Subscription | undefined = new Subscription();
-  private additionServiceValueChangesSubscription: Subscription | undefined = new Subscription();
-
+  private destroy$: Subject<void> = new Subject<void>();
   private readonly dataService: HttpService = inject(HttpService);
-  private formDataService: FormDataService = inject(FormDataService);
+  private readonly eventFormatService: EventFormatService = inject(EventFormatService);
+  private readonly formDataService: FormDataService = inject(FormDataService);
 
   public ngOnInit(): void {
-    this.eventNameSubscription = this.dataService.getEventFormats().subscribe((data: ServerResponse[]) => {
+    this.eventFormatService.getEventFormats().subscribe((data: ServerResponse[]) => {
       this.eventName = data;
     });
 
-    this.addServiceSubscription = this.dataService.getAddServices().subscribe((data: ServerResponse[]) => {
+    this.dataService.getAddServices().subscribe((data: ServerResponse[]) => {
       this.addService = data;
     });
 
-    this.formChangesSubscription = this.eventInfoForm.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe((value: any): void => {
-        this.formDataService.updateFormData(value);
-        this.formSubmitted.emit(this.eventInfoForm.valid);
-      });
+    this.eventInfoForm.valueChanges.pipe(debounceTime(500)).subscribe((value: any) => {
+      this.formDataService.updateFormData(value);
+      this.formSubmitted.emit(this.eventInfoForm.valid);
+    });
 
     // Подписка изменения formEventName для обновления стоимости
-    this.eventNameValueChangesSubscription = this.eventInfoForm
-      .get('formEventName')
-      ?.valueChanges.subscribe((eventName: string | null): void => {
-        const selectedEvent: ServerResponse | undefined = this.eventName.find(
-          (event: ServerResponse): boolean => event.name === eventName,
-        );
-        if (selectedEvent) {
-          this.selectedEventCost = selectedEvent.costPerPerson;
-          this.formDataService.updateEventCost(this.selectedEventCost);
-        } else {
-          this.selectedEventCost = null;
-          this.formDataService.updateEventCost(null);
-        }
-      });
+    this.eventInfoForm.get('formEventName')?.valueChanges.subscribe((eventName: string | null) => {
+      const selectedEvent: ServerResponse | undefined = this.eventName.find(
+        (event: ServerResponse): boolean => event.name === eventName,
+      );
+      if (selectedEvent) {
+        this.selectedEventCost = selectedEvent.costPerPerson;
+        this.formDataService.updateEventCost(this.selectedEventCost);
+      } else {
+        this.selectedEventCost = null;
+        this.formDataService.updateEventCost(null);
+      }
+    });
 
     // Подписка обновления общей стоимости доп. услуг
-    this.additionServiceValueChangesSubscription = this.eventInfoForm
-      .get('additionService')
-      ?.valueChanges.subscribe((selectedServices: string[] | null): void => {
-        this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
-        this.formDataService.updateAdditionalServicesCost(this.totalAdditionalServicesCost);
-      });
+    this.eventInfoForm.get('additionService')?.valueChanges.subscribe((selectedServices: string[] | null) => {
+      this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
+      this.formDataService.updateAdditionalServicesCost(this.totalAdditionalServicesCost);
+    });
   }
 
-  public ngOnDestroy(): void {
-    this.eventNameSubscription.unsubscribe();
-    this.addServiceSubscription.unsubscribe();
-    this.formChangesSubscription.unsubscribe();
-    if (this.eventNameValueChangesSubscription) {
-      this.eventNameValueChangesSubscription.unsubscribe();
-    }
-    if (this.additionServiceValueChangesSubscription) {
-      this.additionServiceValueChangesSubscription.unsubscribe();
-    }
+  public ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.submitForm();
   }
 
-  public onRadioChange(selectedValue: string): void {
+  public onRadioChange(selectedValue: string) {
     this.selectedEventName = selectedValue;
   }
 
   // Проверка заполненности формы
-  public submitForm(): void {
+  public submitForm() {
     if (this.eventInfoForm.valid) {
       this.formSubmitted.emit(true);
     } else {
@@ -106,7 +90,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onServiceSelect(event: Event, serviceName: string): void {
+  public onServiceSelect(event: Event, serviceName: string) {
     event.stopPropagation();
     const selectedServices: string[] = this.eventInfoForm.get('additionService')?.value ?? [];
     const index: number = selectedServices.indexOf(serviceName);
@@ -116,11 +100,11 @@ export class FormEventComponent implements OnInit, OnDestroy {
     this.selectedServices = selectedServices;
   }
 
-  public toggleDropdown(): void {
+  public toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  public getSelectedServicesText(): string {
+  public getSelectedServicesText() {
     if (this.selectedServices.length > 2) {
       const visibleServices: string[] = this.selectedServices.slice(0, 2);
       const remainingCount: number = this.selectedServices.length - 2;
