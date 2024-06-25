@@ -19,7 +19,7 @@ export class FormContactsComponent implements OnInit, OnDestroy {
   protected readonly aboutInfoForm: FormGroup<AboutInfoForm> = new FormGroup<AboutInfoForm>({
     userName: new FormControl(null, Validators.required),
     phoneNumber: new FormControl(null, Validators.required),
-    email: new FormControl(null, [Validators.required, Validators.email]),
+    email: new FormControl(null, Validators.email),
   });
 
   private formChangesSubscription: Subscription = new Subscription();
@@ -31,9 +31,7 @@ export class FormContactsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.formChangesSubscription) {
-      this.formChangesSubscription.unsubscribe();
-    }
+    this.formChangesSubscription.unsubscribe();
     alert('Спасибо за заявку!');
   }
 }

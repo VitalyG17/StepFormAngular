@@ -2,14 +2,14 @@
   <div class="stepper__items">
     <ng-container *ngFor="let item of items; let i = index">
       <button
-        [id]="'step-' + i"
         class="stepper__item"
+        [id]="'step-' + i"
         [ngClass]="{active: item.completed, inactive: !item.completed}">
         <span class="btn-number">{{ i + 1 }}</span>
       </button>
       <label
-        [for]="'step-' + i"
         class="stepper__item-label"
+        [for]="'step-' + i"
         [ngClass]="{inactive: !item.completed}">
         {{ item.label }}
       </label>
