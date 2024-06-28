@@ -7,8 +7,12 @@
       <app-header></app-header>
     </div>
     <div class="main-info">
-      <app-form-event (formSubmitted)="isFormValid = $event"></app-form-event>
-      <app-summary-info></app-summary-info>
+      <app-form-event [(ngModel)]="formData" (formSubmitted)="isFormValid = $event" (selectedEventCostChange)="selectedEventCost = $event"
+                      (totalAdditionalServicesCostChange)="totalAdditionalServicesCost = $event">
+      </app-form-event>
+      <app-summary-info [formState]="formData" [costPerPerson]="selectedEventCost"
+                        [totalAdditionalServicesCost]="totalAdditionalServicesCost">
+      </app-summary-info>
     </div>
     <div class="submit-form">
       <app-submit-button [isFormValid]="isFormValid" (switchView)="switchView.emit()"></app-submit-button>

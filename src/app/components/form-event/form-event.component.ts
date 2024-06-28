@@ -1,27 +1,39 @@
-import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from '@angular/core';
-import {ServerResponse} from 'src/app/types/serverResponse';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, EventEmitter, forwardRef, inject, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators, ControlValueAccessor} from '@angular/forms';
+import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {HttpService} from '../../services/http.service';
-import {debounceTime, Subject} from 'rxjs';
-import {EventInfoForm} from '../../types/eventForm';
-import {FormDataService} from '../../services/form-data.service';
 import {EventFormatService} from '../../services/event-format.service';
+import {ServerResponse} from 'src/app/types/serverResponse';
+import {EventInfoForm} from '../../types/eventForm';
 
 @Component({
   selector: 'app-form-event',
   templateUrl: './form-event.component.html',
   styleUrls: ['./form-event.component.scss'],
-  providers: [HttpService],
+  providers: [
+    HttpService,
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FormEventComponent),
+      multi: true,
+    },
+  ],
 })
-export class FormEventComponent implements OnInit, OnDestroy {
-  public eventName: ServerResponse[] = [];
-  public addService: ServerResponse[] = [];
-  protected selectedEventName: string | null = null;
-  @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public dropdownOpen: boolean = false;
-  public selectedServices: string[] = [];
-  public selectedEventCost: number | null = null;
-  public totalAdditionalServicesCost: number = 0;
+export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccessor {
+  public eventName: ServerResponse[] = []; // Название мероприятия
+  public addService: ServerResponse[] = []; // Названия доп услуг
+  public selectedServices: string[] = []; // Выбранные доп услуги
+  public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
+  protected selectedEventName: string | null = null; // Выбранное название мероприятия
+  public selectedEventCost: number | null = null; // Стоимость выбранного мероприятия
+  public dropdownOpen: boolean = false; // Флаг видимости выпадающего списка
+  @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>(); // Сообщает родительскому компоненту об отправке формы
+  @Output() public selectedEventCostChange: EventEmitter<null | number> = new EventEmitter<number | null>();
+  @Output() public totalAdditionalServicesCostChange: EventEmitter<number> = new EventEmitter<number>();
+
+  private destroy$: Subject<void> = new Subject<void>(); // Для управления подписками
+  private readonly dataService: HttpService = inject(HttpService); // Сервис для получения информации о доп услугах
+  private readonly eventFormatService: EventFormatService = inject(EventFormatService); // Сервис для получения информации о мероприятиях
 
   protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
     formEventName: new FormControl(null, Validators.required),
@@ -31,12 +43,29 @@ export class FormEventComponent implements OnInit, OnDestroy {
     menuWishes: new FormControl(''),
   });
 
-  private destroy$: Subject<void> = new Subject<void>();
-  private readonly dataService: HttpService = inject(HttpService);
-  private readonly eventFormatService: EventFormatService = inject(EventFormatService);
-  private readonly formDataService: FormDataService = inject(FormDataService);
+  // Методы ControlValueAccessor
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onChange: (value: EventInfoForm) => void = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onTouched: any = () => {};
+  // Установка значения формы извне
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public writeValue(value: any): void {
+    this.eventInfoForm.patchValue(value);
+  }
+
+  // Обработчик изменений в форме
+  public registerOnChange(fn: (value: EventInfoForm) => void): void {
+    this.onChange = fn;
+  }
+
+  // Обработчик потери фокуса в форме
+  public registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
 
   public ngOnInit(): void {
+    // Получение данных с сервера при инициализации
     this.eventFormatService.getEventFormats().subscribe((data: ServerResponse[]) => {
       this.eventName = data;
     });
@@ -45,44 +74,48 @@ export class FormEventComponent implements OnInit, OnDestroy {
       this.addService = data;
     });
 
-    this.eventInfoForm.valueChanges.pipe(debounceTime(500)).subscribe((value: any) => {
-      this.formDataService.updateFormData(value);
-      this.formSubmitted.emit(this.eventInfoForm.valid);
+    // Подписка на изменение формы
+    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe((formData: any) => {
+      console.log('Текущее состояние формы:', formData);
+      console.log('Цена за человека:', this.selectedEventCost);
+      console.log('Стоимость доп услуг:', this.totalAdditionalServicesCost);
+      this.onChange(formData);
     });
 
-    // Подписка изменения formEventName для обновления стоимости
+    // Поиск стоимости за человека в зависимости от типа мероприятия
     this.eventInfoForm.get('formEventName')?.valueChanges.subscribe((eventName: string | null) => {
       const selectedEvent: ServerResponse | undefined = this.eventName.find(
         (event: ServerResponse): boolean => event.name === eventName,
       );
       if (selectedEvent) {
         this.selectedEventCost = selectedEvent.costPerPerson;
-        this.formDataService.updateEventCost(this.selectedEventCost);
       } else {
         this.selectedEventCost = null;
-        this.formDataService.updateEventCost(null);
       }
+      this.selectedEventCostChange.emit(this.selectedEventCost);
     });
 
-    // Подписка обновления общей стоимости доп. услуг
+    // Вычисление стоимости доп услуг
     this.eventInfoForm.get('additionService')?.valueChanges.subscribe((selectedServices: string[] | null) => {
       this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
-      this.formDataService.updateAdditionalServicesCost(this.totalAdditionalServicesCost);
+      this.totalAdditionalServicesCostChange.emit(this.totalAdditionalServicesCost);
     });
   }
 
-  public ngOnDestroy() {
+  // Отписка от всех подписок
+  public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     this.submitForm();
   }
 
-  public onRadioChange(selectedValue: string) {
+  // Метод для определения того, какой тип мероприятия выбран
+  public onRadioChange(selectedValue: string): void {
     this.selectedEventName = selectedValue;
   }
 
-  // Проверка заполненности формы
-  public submitForm() {
+  // Проверяет валидность формы
+  public submitForm(): void {
     if (this.eventInfoForm.valid) {
       this.formSubmitted.emit(true);
     } else {
@@ -90,7 +123,8 @@ export class FormEventComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onServiceSelect(event: Event, serviceName: string) {
+  // Выбор доп услуг
+  public onServiceSelect(event: Event, serviceName: string): void {
     event.stopPropagation();
     const selectedServices: string[] = this.eventInfoForm.get('additionService')?.value ?? [];
     const index: number = selectedServices.indexOf(serviceName);
@@ -100,11 +134,13 @@ export class FormEventComponent implements OnInit, OnDestroy {
     this.selectedServices = selectedServices;
   }
 
-  public toggleDropdown() {
+  // Видимость выпадающего списка
+  public toggleDropdown(): void {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  public getSelectedServicesText() {
+  // Текст для отображения выбранных услуг
+  public getSelectedServicesText(): string {
     if (this.selectedServices.length > 2) {
       const visibleServices: string[] = this.selectedServices.slice(0, 2);
       const remainingCount: number = this.selectedServices.length - 2;
@@ -113,7 +149,7 @@ export class FormEventComponent implements OnInit, OnDestroy {
     return this.selectedServices.join(', ');
   }
 
-  // Подсчет стоимости дополнительных услуг
+  // Вычисление стоимости доп услуг
   private calculateTotalAdditionalServicesCost(selectedServices: string[] | null): number {
     if (selectedServices === null) {
       return 0;

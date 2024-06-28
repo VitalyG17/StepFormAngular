@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AboutEventComponent} from './steps/about-event/about-event.component';
 import {ContactsComponent} from './steps/contacts/contacts.component';
 import {StepperComponent} from './components/stepper/stepper.component';
@@ -33,7 +33,7 @@ import {EventFormatService} from './services/event-format.service';
     PhoneMaskDirective,
     RubCurrencyPipe,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgOptimizedImage],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgOptimizedImage, FormsModule],
   providers: [FormDataService, EventFormatService],
   bootstrap: [AppComponent],
 })

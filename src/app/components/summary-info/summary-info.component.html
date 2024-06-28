@@ -4,7 +4,7 @@
       <div class="current-price">
         <span class="current-price__title">Примерная стоимость:</span>
         <span class="current-price__total-price">{{ totalPrice | rubCurrency }}</span>
-        <div class="current-price__per-person-price">{{ onePersonPrice | rubCurrency }}/чел</div>
+        <div class="current-price__per-person-price">{{ (costPerPerson || 0) | rubCurrency }}/чел</div>
       </div>
     </div>
     <div class="summary-info__form-data">
