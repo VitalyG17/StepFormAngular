@@ -6,7 +6,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   styleUrls: ['./submit-button.component.scss'],
 })
 export class SubmitButtonComponent {
-  @Input() public title: string = 'Продолжить';
+  @Input() public title: string = '';
   @Input() public isFormValid: boolean = false;
   @Output() public switchView: EventEmitter<void> = new EventEmitter<void>();
 

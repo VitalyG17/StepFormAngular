@@ -10,8 +10,10 @@
       <app-form-contacts (formSubmitted)="isFormValid = $event"></app-form-contacts>
       <app-summary-info></app-summary-info>
     </div>
-    <div class="submit-form">
-      <app-submit-button [title]="'Отправить заявку'" [isFormValid]="isFormValid" (switchView)="switchView.emit()"></app-submit-button>
-    </div>
+    <ng-content></ng-content>
+      <div class="submit-form">
+        <ng-content></ng-content>
+<!--      <app-submit-button [title]="'Отправить заявку'" [isFormValid]="isFormValid" ></app-submit-button>-->
+      </div>
   </div>
 </div>

@@ -1,8 +1,12 @@
 <ng-container [ngSwitch]="currentView">
   <ng-container *ngSwitchCase="'about'">
-    <app-about-event (switchView)="switchView()"></app-about-event>
+    <app-about-event>
+      <app-submit-button [title]="'Продолжить'" (switchView)="switchView()"></app-submit-button>
+    </app-about-event>
   </ng-container>
   <ng-container *ngSwitchCase="'contacts'">
-    <app-contacts (switchView)="switchView()"></app-contacts>
+    <app-contacts>
+      <app-submit-button [title]="'Отправить заявку'" (switchView)="switchView()"></app-submit-button>
+    </app-contacts>
   </ng-container>
 </ng-container>

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component} from '@angular/core';
 import {EventInfoForm} from '../../types/eventForm';
 
 @Component({
@@ -11,5 +11,4 @@ export class AboutEventComponent {
   public totalAdditionalServicesCost: number = 0;
   public formData: EventInfoForm | null = null;
   public isFormValid: boolean = false;
-  @Output() public switchView: EventEmitter<void> = new EventEmitter<void>();
 }
