@@ -23,8 +23,8 @@ interface AboutInfoForm {
 export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private destroy$: Subject<void> = new Subject<void>();
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
-  private onChange: (value: AboutInfoForm) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange?: (value: AboutInfoForm) => void;
+  protected onTouched?: () => void;
 
   protected readonly aboutInfoForm: FormGroup<AboutInfoForm> = new FormGroup<AboutInfoForm>({
     userName: new FormControl(null, Validators.required),
@@ -46,15 +46,23 @@ export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAcc
     alert('Спасибо за заявку!');
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: AboutInfoForm | null) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  public writeValue(obj: any): void {
-    this.aboutInfoForm.patchValue(obj);
+  public writeValue(obj: AboutInfoForm | null): void {
+    if (obj) {
+      this.aboutInfoForm.patchValue({
+        userName: obj.userName.value,
+        phoneNumber: obj.phoneNumber.value,
+        email: obj.email.value,
+      });
+    } else {
+      this.aboutInfoForm.reset();
+    }
   }
 }

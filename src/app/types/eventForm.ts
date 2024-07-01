@@ -7,3 +7,11 @@ export interface EventInfoForm {
   additionService: FormControl<string[] | null>;
   menuWishes: FormControl<string | null>;
 }
+
+export interface EventInfoFormValue {
+  formEventName: string | null;
+  countGuests: number | null;
+  date: Date | null;
+  additionService: string[] | null;
+  menuWishes: string | null;
+}

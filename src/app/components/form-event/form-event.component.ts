@@ -1,10 +1,10 @@
-import {Component, EventEmitter, forwardRef, inject, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators, ControlValueAccessor} from '@angular/forms';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {HttpService} from '../../services/http.service';
 import {EventFormatService} from '../../services/event-format.service';
 import {ServerResponse} from 'src/app/types/serverResponse';
-import {EventInfoForm} from '../../types/eventForm';
+import {EventInfoForm, EventInfoFormValue} from '../../types/eventForm';
 
 @Component({
   selector: 'app-form-event',
@@ -44,18 +44,15 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   });
 
   // Методы ControlValueAccessor
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: (value: EventInfoForm) => void = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onTouched: any = () => {};
+  private onChange?: (value: EventInfoFormValue) => void;
+  protected onTouched?: () => void;
   // Установка значения формы извне
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public writeValue(value: any): void {
+  public writeValue(value: EventInfoFormValue): void {
     this.eventInfoForm.patchValue(value);
   }
 
   // Обработчик изменений в форме
-  public registerOnChange(fn: (value: EventInfoForm) => void): void {
+  public registerOnChange(fn: (value: EventInfoFormValue) => void): void {
     this.onChange = fn;
   }
 
@@ -79,7 +76,9 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
       console.log('Текущее состояние формы:', formData);
       console.log('Цена за человека:', this.selectedEventCost);
       console.log('Стоимость доп услуг:', this.totalAdditionalServicesCost);
-      this.onChange(formData);
+      if (this.onChange) {
+        this.onChange(formData);
+      }
     });
 
     // Поиск стоимости за человека в зависимости от типа мероприятия
