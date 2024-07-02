@@ -32,6 +32,8 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   public dropdownOpen: boolean = false; // Флаг видимости выпадающего списка
 
+  public formattedServicesText: string = ''; //Строка выбранных доп.услуг
+
   protected selectedEventName: string | null = null; // Выбранное название мероприятия
 
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>(); // Сообщает родительскому компоненту об отправке формы
@@ -94,6 +96,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
       console.log('Текущее состояние формы:', formData);
       console.log('Цена за человека:', this.selectedEventCost);
       console.log('Стоимость доп услуг:', this.totalAdditionalServicesCost);
+      console.log(this.formattedServicesText);
       if (this.onChange) {
         this.onChange(formData);
       }
@@ -122,6 +125,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
       .subscribe((selectedServices: string[] | null) => {
         this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
         this.totalAdditionalServicesCostChange.emit(this.totalAdditionalServicesCost);
+        this.formattedServicesText = this.calculateServicesText(selectedServices);
       });
   }
 
@@ -163,13 +167,16 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   // Текст для отображения выбранных услуг
-  public getSelectedServicesText(): string {
-    if (this.selectedServices.length > 2) {
-      const visibleServices: string[] = this.selectedServices.slice(0, 2);
-      const remainingCount: number = this.selectedServices.length - 2;
+  private calculateServicesText(selectedServices: string[] | null): string {
+    if (selectedServices === null) {
+      return '';
+    }
+    if (selectedServices.length > 2) {
+      const visibleServices: string[] = selectedServices.slice(0, 2);
+      const remainingCount: number = selectedServices.length - 2;
       return `${visibleServices.join(', ')} +${remainingCount}`;
     }
-    return this.selectedServices.join(', ');
+    return selectedServices.join(', ');
   }
 
   // Вычисление стоимости доп услуг

@@ -31,7 +31,7 @@
   <div class="form-event__group">
     <div class="dropdown" (click)="toggleDropdown()">
       <button class="dropdown-toggle" type="button" id="additionServiceDropdown" aria-expanded="false">
-        Дополнительные услуги: {{ getSelectedServicesText() }}
+        Дополнительные услуги: {{ formattedServicesText }}
         <span class="dropdown-icon">
           <img *ngIf="!dropdownOpen" ngSrc="assets/img/dropdownClose.svg" height="20" width="20" alt="Сlosed dropdown">
           <img *ngIf="dropdownOpen" ngSrc="assets/img/dropdownOpen.svg" height="20" width="20" alt="Open dropdown">
