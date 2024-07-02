@@ -11,7 +11,7 @@ enum ViewPages {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  protected currentView: string = ViewPages.About;
+  protected currentView: ViewPages = ViewPages.About;
 
   protected switchView(): void {
     this.currentView = this.currentView === ViewPages.About ? ViewPages.Contacts : ViewPages.About;

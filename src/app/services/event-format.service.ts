@@ -5,12 +5,13 @@ import {ServerResponse} from '../types/serverResponse';
 
 @Injectable()
 export class EventFormatService {
-  private readonly eventFormatUrl: string = 'http://localhost:3000/eventFormat';
+  private readonly baseURL: string = 'http://localhost:3000/';
 
   constructor(private readonly http: HttpClient) {}
 
-  public getEventFormats(): Observable<ServerResponse[]> {
-    return this.http.get<ServerResponse[]>(this.eventFormatUrl).pipe(
+  public getEventFormats(addURL: string): Observable<ServerResponse[]> {
+    const fullURL: string = `${this.baseURL}${addURL}`;
+    return this.http.get<ServerResponse[]>(fullURL).pipe(
       catchError((err: unknown) => {
         console.error('Error!', err);
         return of([]);

@@ -21,18 +21,29 @@ import {EventInfoForm, EventInfoFormValue} from '../../types/eventForm';
 })
 export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccessor {
   public eventName: ServerResponse[] = []; // Название мероприятия
+
   public addService: ServerResponse[] = []; // Названия доп услуг
+
   public selectedServices: string[] = []; // Выбранные доп услуги
+
   public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
-  protected selectedEventName: string | null = null; // Выбранное название мероприятия
+
   public selectedEventCost: number | null = null; // Стоимость выбранного мероприятия
+
   public dropdownOpen: boolean = false; // Флаг видимости выпадающего списка
+
+  protected selectedEventName: string | null = null; // Выбранное название мероприятия
+
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>(); // Сообщает родительскому компоненту об отправке формы
+
   @Output() public selectedEventCostChange: EventEmitter<null | number> = new EventEmitter<number | null>();
+
   @Output() public totalAdditionalServicesCostChange: EventEmitter<number> = new EventEmitter<number>();
 
   private destroy$: Subject<void> = new Subject<void>(); // Для управления подписками
+
   private readonly dataService: HttpService = inject(HttpService); // Сервис для получения информации о доп услугах
+
   private readonly eventFormatService: EventFormatService = inject(EventFormatService); // Сервис для получения информации о мероприятиях
 
   protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
@@ -46,6 +57,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   // Методы ControlValueAccessor
   private onChange?: (value: EventInfoFormValue) => void;
   protected onTouched?: () => void;
+
   // Установка значения формы извне
   public writeValue(value: EventInfoFormValue): void {
     this.eventInfoForm.patchValue(value);
@@ -63,13 +75,19 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   public ngOnInit(): void {
     // Получение данных с сервера при инициализации
-    this.eventFormatService.getEventFormats().subscribe((data: ServerResponse[]) => {
-      this.eventName = data;
-    });
+    this.eventFormatService
+      .getEventFormats('eventFormat')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: ServerResponse[]) => {
+        this.eventName = data;
+      });
 
-    this.dataService.getAddServices().subscribe((data: ServerResponse[]) => {
-      this.addService = data;
-    });
+    this.dataService
+      .getAddServices()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: ServerResponse[]) => {
+        this.addService = data;
+      });
 
     // Подписка на изменение формы
     this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe((formData: any) => {
@@ -82,23 +100,29 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
     });
 
     // Поиск стоимости за человека в зависимости от типа мероприятия
-    this.eventInfoForm.get('formEventName')?.valueChanges.subscribe((eventName: string | null) => {
-      const selectedEvent: ServerResponse | undefined = this.eventName.find(
-        (event: ServerResponse): boolean => event.name === eventName,
-      );
-      if (selectedEvent) {
-        this.selectedEventCost = selectedEvent.costPerPerson;
-      } else {
-        this.selectedEventCost = null;
-      }
-      this.selectedEventCostChange.emit(this.selectedEventCost);
-    });
+    this.eventInfoForm
+      .get('formEventName')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((eventName: string | null) => {
+        const selectedEvent: ServerResponse | undefined = this.eventName.find(
+          (event: ServerResponse): boolean => event.name === eventName,
+        );
+        if (selectedEvent) {
+          this.selectedEventCost = selectedEvent.costPerPerson;
+        } else {
+          this.selectedEventCost = null;
+        }
+        this.selectedEventCostChange.emit(this.selectedEventCost);
+      });
 
     // Вычисление стоимости доп услуг
-    this.eventInfoForm.get('additionService')?.valueChanges.subscribe((selectedServices: string[] | null) => {
-      this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
-      this.totalAdditionalServicesCostChange.emit(this.totalAdditionalServicesCost);
-    });
+    this.eventInfoForm
+      .get('additionService')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((selectedServices: string[] | null) => {
+        this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
+        this.totalAdditionalServicesCostChange.emit(this.totalAdditionalServicesCost);
+      });
   }
 
   // Отписка от всех подписок
