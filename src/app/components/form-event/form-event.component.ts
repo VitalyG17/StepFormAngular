@@ -20,29 +20,29 @@ import {EventInfoForm, EventInfoFormValue} from '../../types/eventForm';
   ],
 })
 export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  public eventName: ServerResponse[] = []; // Название мероприятия
-
-  public addService: ServerResponse[] = []; // Названия доп услуг
-
-  public selectedServices: string[] = []; // Выбранные доп услуги
-
-  public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
-
-  public selectedEventCost: number | null = null; // Стоимость выбранного мероприятия
-
-  public dropdownOpen: boolean = false; // Флаг видимости выпадающего списка
-
-  public formattedServicesText: string = ''; //Строка выбранных доп.услуг
-
-  protected selectedEventName: string | null = null; // Выбранное название мероприятия
-
   @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>(); // Сообщает родительскому компоненту об отправке формы
 
   @Output() public selectedEventCostChange: EventEmitter<null | number> = new EventEmitter<number | null>();
 
   @Output() public totalAdditionalServicesCostChange: EventEmitter<number> = new EventEmitter<number>();
 
+  public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
+
+  protected eventName: ServerResponse[] = []; // Название мероприятия
+
+  protected addService: ServerResponse[] = []; // Названия доп услуг
+
+  protected dropdownOpen: boolean = false; // Флаг видимости выпадающего списка
+
+  protected formattedServicesText: string = ''; //Строка выбранных доп.услуг
+
+  protected selectedEventName: string | null = null; // Выбранное название мероприятия
+
+  protected selectedServices: string[] = []; // Выбранные доп услуги
+
   private destroy$: Subject<void> = new Subject<void>(); // Для управления подписками
+
+  private selectedEventCost: number = 0; // Стоимость выбранного мероприятия
 
   private readonly dataService: HttpService = inject(HttpService); // Сервис для получения информации о доп услугах
 
@@ -112,8 +112,6 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
         );
         if (selectedEvent) {
           this.selectedEventCost = selectedEvent.costPerPerson;
-        } else {
-          this.selectedEventCost = null;
         }
         this.selectedEventCostChange.emit(this.selectedEventCost);
       });
@@ -144,9 +142,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   // Проверяет валидность формы
   public submitForm(): void {
     if (this.eventInfoForm.valid) {
-      this.formSubmitted.emit(true);
-    } else {
-      this.formSubmitted.emit(false);
+      this.formSubmitted.emit(this.eventInfoForm.valid);
     }
   }
 
@@ -168,7 +164,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   // Текст для отображения выбранных услуг
   private calculateServicesText(selectedServices: string[] | null): string {
-    if (selectedServices === null) {
+    if (!selectedServices) {
       return '';
     }
     if (selectedServices.length > 2) {
@@ -181,7 +177,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   // Вычисление стоимости доп услуг
   private calculateTotalAdditionalServicesCost(selectedServices: string[] | null): number {
-    if (selectedServices === null) {
+    if (!selectedServices) {
       return 0;
     }
     return selectedServices.reduce((total: number, serviceName: string): number => {

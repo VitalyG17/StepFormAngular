@@ -21,13 +21,13 @@ interface AboutInfoForm {
   ],
 })
 export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() public readonly formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  protected onTouched?: () => void;
+  protected onTouched: (() => void) | undefined;
 
-  private onChange?: (value: AboutInfoForm) => void;
+  private onChange: ((value: AboutInfoForm) => void) | undefined;
 
-  private destroy$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
   protected readonly aboutInfoForm: FormGroup<AboutInfoForm> = new FormGroup<AboutInfoForm>({
     userName: new FormControl(null, Validators.required),
@@ -57,7 +57,7 @@ export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAcc
     this.onTouched = fn;
   }
 
-  public writeValue(obj: AboutInfoForm | null): void {
+  public writeValue(obj: AboutInfoForm): void {
     if (obj) {
       this.aboutInfoForm.patchValue({
         userName: obj.userName.value,

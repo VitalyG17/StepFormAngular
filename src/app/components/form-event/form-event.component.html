@@ -15,7 +15,7 @@
     <small *ngIf="eventInfoForm.controls.formEventName.hasError('required') && eventInfoForm.controls.formEventName.touched" class="error">Обязательное поле</small>
   </div>
   <div class="form-event__group">
-    <input id="countGuest" type="number" placeholder="Количество гостей" min="10" max="100" [formControl]="eventInfoForm.controls.countGuests">
+    <input id="countGuest" type="number" placeholder="Количество гостей" [formControl]="eventInfoForm.controls.countGuests">
     <div class="form-event__group-sub-info">
       <span>От 10 человек</span>
       <span>До 100 человек</span>
