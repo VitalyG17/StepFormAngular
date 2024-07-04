@@ -15,3 +15,7 @@ export interface EventInfoFormValue {
   additionService: string[] | null;
   menuWishes: string | null;
 }
+
+export type EventFormType = {
+  [key in keyof EventInfoForm]: FormControl<EventInfoFormValue[key]>;
+};

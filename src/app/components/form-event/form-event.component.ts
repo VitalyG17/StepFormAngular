@@ -1,10 +1,11 @@
-import {Component, EventEmitter, forwardRef, inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators, ControlValueAccessor} from '@angular/forms';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {HttpService} from '../../services/http.service';
 import {EventFormatService} from '../../services/event-format.service';
 import {ServerResponse} from 'src/app/types/serverResponse';
-import {EventInfoForm, EventInfoFormValue} from '../../types/eventForm';
+import {EventFormType, EventInfoFormValue} from '../../types/eventForm';
+import {FormStatusService} from '../../services/form-status.service';
 
 @Component({
   selector: 'app-form-event',
@@ -25,6 +26,8 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   @Output() public selectedEventCostChange: EventEmitter<null | number> = new EventEmitter<number | null>();
 
   @Output() public totalAdditionalServicesCostChange: EventEmitter<number> = new EventEmitter<number>();
+
+  @Input() public isFormValid: boolean = false;
 
   public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
 
@@ -48,7 +51,9 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   private readonly eventFormatService: EventFormatService = inject(EventFormatService); // Сервис для получения информации о мероприятиях
 
-  protected readonly eventInfoForm: FormGroup<EventInfoForm> = new FormGroup<EventInfoForm>({
+  private readonly formStatusService: FormStatusService = inject(FormStatusService);
+
+  protected readonly eventInfoForm: FormGroup<EventFormType> = new FormGroup<EventFormType>({
     formEventName: new FormControl(null, Validators.required),
     countGuests: new FormControl(null, [Validators.required, Validators.min(10), Validators.max(100)]),
     date: new FormControl(null, Validators.required),
@@ -91,7 +96,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
         this.addService = data;
       });
 
-    // Подписка на изменение формы
+    // Подписка на изменение формы formData: EventInfoFormValue
     this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe((formData: any) => {
       console.log('Текущее состояние формы:', formData);
       console.log('Цена за человека:', this.selectedEventCost);
@@ -100,6 +105,7 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
       if (this.onChange) {
         this.onChange(formData);
       }
+      this.submitForm();
     });
 
     // Поиск стоимости за человека в зависимости от типа мероприятия
@@ -131,7 +137,6 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.submitForm();
   }
 
   // Метод для определения того, какой тип мероприятия выбран
@@ -141,9 +146,9 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   // Проверяет валидность формы
   public submitForm(): void {
-    if (this.eventInfoForm.valid) {
-      this.formSubmitted.emit(this.eventInfoForm.valid);
-    }
+    this.isFormValid = this.eventInfoForm.valid;
+    this.formSubmitted.emit(this.eventInfoForm.valid);
+    this.formStatusService.setFormValid(this.isFormValid);
   }
 
   // Выбор доп услуг

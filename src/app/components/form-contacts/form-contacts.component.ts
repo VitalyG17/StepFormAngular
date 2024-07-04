@@ -1,6 +1,7 @@
-import {Component, EventEmitter, forwardRef, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Subject, takeUntil} from 'rxjs';
+import {FormStatusService} from '../../services/form-status.service';
 
 interface AboutInfoForm {
   userName: FormControl<string | null>;
@@ -25,6 +26,8 @@ export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   protected onTouched: (() => void) | undefined;
 
+  private formStatusService: FormStatusService = inject(FormStatusService);
+
   private onChange: ((value: AboutInfoForm) => void) | undefined;
 
   private readonly destroy$: Subject<void> = new Subject<void>();
@@ -37,16 +40,15 @@ export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   public ngOnInit(): void {
     this.aboutInfoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      // При каждом изменении формы проверка валидности
-      this.formSubmitted.emit(this.aboutInfoForm.valid);
+      const isValid: boolean = this.aboutInfoForm.valid;
+      this.formStatusService.setFormValid(isValid);
+      this.formSubmitted.emit(isValid);
     });
   }
 
-  // Отписка от всех потокв
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    alert('Спасибо за заявку!');
   }
 
   public registerOnChange(fn: (value: AboutInfoForm | null) => void): void {

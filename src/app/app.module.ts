@@ -18,6 +18,7 @@ import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
 import {FormDataService} from './services/form-data.service';
 import {NgOptimizedImage} from '@angular/common';
 import {EventFormatService} from './services/event-format.service';
+import {FormStatusService} from './services/form-status.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import {EventFormatService} from './services/event-format.service';
     RubCurrencyPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgOptimizedImage, FormsModule],
-  providers: [FormDataService, EventFormatService],
+  providers: [FormDataService, EventFormatService, FormStatusService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
