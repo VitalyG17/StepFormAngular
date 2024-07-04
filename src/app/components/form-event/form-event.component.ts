@@ -97,13 +97,10 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
       });
 
     // Подписка на изменение формы formData: EventInfoFormValue
-    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe((formData: any) => {
-      console.log('Текущее состояние формы:', formData);
-      console.log('Цена за человека:', this.selectedEventCost);
-      console.log('Стоимость доп услуг:', this.totalAdditionalServicesCost);
-      console.log(this.formattedServicesText);
+    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+      console.log(this.eventInfoForm.value);
       if (this.onChange) {
-        this.onChange(formData);
+        this.onChange(this.eventInfoForm.getRawValue());
       }
       this.submitForm();
     });

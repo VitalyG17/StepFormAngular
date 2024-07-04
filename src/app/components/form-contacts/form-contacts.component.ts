@@ -1,6 +1,6 @@
 import {Component, EventEmitter, forwardRef, inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Subject, takeUntil} from 'rxjs';
+import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FormStatusService} from '../../services/form-status.service';
 
 interface AboutInfoForm {
@@ -39,10 +39,11 @@ export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAcc
   });
 
   public ngOnInit(): void {
-    this.aboutInfoForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.aboutInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
       const isValid: boolean = this.aboutInfoForm.valid;
       this.formStatusService.setFormValid(isValid);
       this.formSubmitted.emit(isValid);
+      console.log(this.aboutInfoForm.value);
     });
   }
 

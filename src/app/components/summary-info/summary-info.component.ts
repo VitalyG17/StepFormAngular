@@ -9,8 +9,11 @@ import {EventInfoForm} from '../../types/eventForm';
 })
 export class SummaryInfoComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public costPerPerson: number | null = null;
+
   @Input() public totalAdditionalServicesCost: number = 0;
+
   @Input() public formState: EventInfoForm | null = null;
+
   protected totalPrice: number = 0;
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -26,7 +29,6 @@ export class SummaryInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnChanges(): void {
     this.updateTotalPrice();
-    console.log('Итоговая цена: ', this.totalPrice);
   }
 
   private updateTotalPrice(): void {
