@@ -15,7 +15,6 @@ import {SummaryInfoComponent} from './components/summary-info/summary-info.compo
 import {FormContactsComponent} from './components/form-contacts/form-contacts.component';
 import {PhoneMaskDirective} from './directives/phone-mask.directive';
 import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
-import {FormDataService} from './services/form-data.service';
 import {NgOptimizedImage} from '@angular/common';
 import {EventFormatService} from './services/event-format.service';
 import {FormStatusService} from './services/form-status.service';
@@ -35,7 +34,7 @@ import {FormStatusService} from './services/form-status.service';
     RubCurrencyPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgOptimizedImage, FormsModule],
-  providers: [FormDataService, EventFormatService, FormStatusService],
+  providers: [EventFormatService, FormStatusService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

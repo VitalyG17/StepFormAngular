@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 interface Items {
   label: string;
-  completed: boolean;
 }
 @Component({
   selector: 'app-stepper',
@@ -10,8 +9,7 @@ interface Items {
   styleUrls: ['./stepper.component.scss'],
 })
 export class StepperComponent {
-  public items: Items[] = [
-    {label: 'Мероприятие', completed: true},
-    {label: 'Контакты', completed: false},
-  ];
+  @Input() public activeStepsCount: number = 1;
+
+  protected items: Items[] = [{label: 'Мероприятие'}, {label: 'Контакты'}];
 }

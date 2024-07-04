@@ -4,13 +4,13 @@
       <button
         class="stepper__item"
         [id]="'step-' + i"
-        [ngClass]="{active: item.completed, inactive: !item.completed}">
+        [ngClass]="{active: i < activeStepsCount, inactive: i >= activeStepsCount}">
         <span class="btn-number">{{ i + 1 }}</span>
       </button>
       <label
         class="stepper__item-label"
         [for]="'step-' + i"
-        [ngClass]="{inactive: !item.completed}">
+        [ngClass]="{inactive: i >= activeStepsCount}">
         {{ item.label }}
       </label>
     </ng-container>

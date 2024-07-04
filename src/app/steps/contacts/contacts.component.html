@@ -1,7 +1,7 @@
 <div class="contacts">
   <div class="contacts__container">
     <div class="about-event__steps">
-      <app-stepper></app-stepper>
+      <app-stepper [activeStepsCount]="2"></app-stepper>
     </div>
     <div class="contacts__header">
       <app-header [title]="'Расскажите о себе'"></app-header>
@@ -13,7 +13,6 @@
     <ng-content></ng-content>
       <div class="submit-form">
         <ng-content></ng-content>
-<!--      <app-submit-button [title]="'Отправить заявку'" [isFormValid]="isFormValid" ></app-submit-button>-->
       </div>
   </div>
 </div>
