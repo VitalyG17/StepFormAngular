@@ -42,7 +42,6 @@ export class FormContactsComponent implements OnInit, OnDestroy, ControlValueAcc
     this.aboutInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
       const isValid: boolean = this.aboutInfoForm.valid;
       this.formStatusService.setFormValid(isValid);
-      this.formSubmitted.emit(isValid);
       console.log(this.aboutInfoForm.value);
     });
   }

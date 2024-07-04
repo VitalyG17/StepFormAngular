@@ -10,5 +10,4 @@ export class AboutEventComponent {
   public selectedEventCost: number | null = null;
   public totalAdditionalServicesCost: number = 0;
   public formData: EventInfoForm | null = null;
-  public isFormValid: boolean = false;
 }

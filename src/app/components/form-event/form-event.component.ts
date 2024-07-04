@@ -1,4 +1,4 @@
-import {Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators, ControlValueAccessor} from '@angular/forms';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {HttpService} from '../../services/http.service';
@@ -21,15 +21,9 @@ import {FormStatusService} from '../../services/form-status.service';
   ],
 })
 export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  @Output() public formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>(); // Сообщает родительскому компоненту об отправке формы
-
   @Output() public selectedEventCostChange: EventEmitter<null | number> = new EventEmitter<number | null>();
 
   @Output() public totalAdditionalServicesCostChange: EventEmitter<number> = new EventEmitter<number>();
-
-  @Input() public isFormValid: boolean = false;
-
-  public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
 
   protected eventName: ServerResponse[] = []; // Название мероприятия
 
@@ -46,6 +40,10 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   private destroy$: Subject<void> = new Subject<void>(); // Для управления подписками
 
   private selectedEventCost: number = 0; // Стоимость выбранного мероприятия
+
+  private totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
+
+  private isFormValid: boolean = false; // Флаг валидности формы
 
   private readonly dataService: HttpService = inject(HttpService); // Сервис для получения информации о доп услугах
 
@@ -72,7 +70,10 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
 
   // Обработчик изменений в форме
   public registerOnChange(fn: (value: EventInfoFormValue) => void): void {
-    this.onChange = fn;
+    this.onChange = (value: EventInfoFormValue): void => {
+      fn(value);
+      this.checkValidForm();
+    };
   }
 
   // Обработчик потери фокуса в форме
@@ -102,7 +103,6 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
       if (this.onChange) {
         this.onChange(this.eventInfoForm.getRawValue());
       }
-      this.submitForm();
     });
 
     // Поиск стоимости за человека в зависимости от типа мероприятия
@@ -137,19 +137,12 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   // Метод для определения того, какой тип мероприятия выбран
-  public onRadioChange(selectedValue: string): void {
+  protected onRadioChange(selectedValue: string): void {
     this.selectedEventName = selectedValue;
   }
 
-  // Проверяет валидность формы
-  public submitForm(): void {
-    this.isFormValid = this.eventInfoForm.valid;
-    this.formSubmitted.emit(this.eventInfoForm.valid);
-    this.formStatusService.setFormValid(this.isFormValid);
-  }
-
   // Выбор доп услуг
-  public onServiceSelect(event: Event, serviceName: string): void {
+  protected onServiceSelect(event: Event, serviceName: string): void {
     event.stopPropagation();
     const selectedServices: string[] = this.eventInfoForm.get('additionService')?.value ?? [];
     const index: number = selectedServices.indexOf(serviceName);
@@ -160,8 +153,14 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   // Видимость выпадающего списка
-  public toggleDropdown(): void {
+  protected toggleDropdown(): void {
     this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  // Проверяет валидность формы
+  private checkValidForm(): void {
+    this.isFormValid = this.eventInfoForm.valid;
+    this.formStatusService.setFormValid(this.isFormValid);
   }
 
   // Текст для отображения выбранных услуг

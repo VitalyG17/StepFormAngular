@@ -7,7 +7,7 @@
       <app-header></app-header>
     </div>
     <div class="main-info">
-      <app-form-event [(ngModel)]="formData" (formSubmitted)="isFormValid = $event" (selectedEventCostChange)="selectedEventCost = $event"
+      <app-form-event [(ngModel)]="formData" (selectedEventCostChange)="selectedEventCost = $event"
                       (totalAdditionalServicesCostChange)="totalAdditionalServicesCost = $event">
       </app-form-event>
       <app-summary-info [formState]="formData" [costPerPerson]="selectedEventCost"
