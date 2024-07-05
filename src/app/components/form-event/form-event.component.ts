@@ -1,5 +1,12 @@
 import {Component, EventEmitter, forwardRef, inject, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators, ControlValueAccessor} from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators,
+  ControlValueAccessor,
+  AbstractControl,
+} from '@angular/forms';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {HttpService} from '../../services/http.service';
 import {EventFormatService} from '../../services/event-format.service';
@@ -106,10 +113,10 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
     });
 
     // Поиск стоимости за человека в зависимости от типа мероприятия
-    this.eventInfoForm
-      .get('formEventName')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((eventName: string | null) => {
+    const formEventNameControl: AbstractControl<string | null, string | null> | null =
+      this.eventInfoForm.get('formEventName');
+    if (formEventNameControl) {
+      formEventNameControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((eventName: string | null) => {
         const selectedEvent: ServerResponse | undefined = this.eventName.find(
           (event: ServerResponse): boolean => event.name === eventName,
         );
@@ -118,16 +125,20 @@ export class FormEventComponent implements OnInit, OnDestroy, ControlValueAccess
         }
         this.selectedEventCostChange.emit(this.selectedEventCost);
       });
+    }
 
     // Вычисление стоимости доп услуг
-    this.eventInfoForm
-      .get('additionService')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((selectedServices: string[] | null) => {
-        this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
-        this.totalAdditionalServicesCostChange.emit(this.totalAdditionalServicesCost);
-        this.formattedServicesText = this.calculateServicesText(selectedServices);
-      });
+    const additionServiceControl: AbstractControl<string[] | null, string[] | null> | null =
+      this.eventInfoForm.get('additionService');
+    if (additionServiceControl) {
+      additionServiceControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((selectedServices: string[] | null) => {
+          this.totalAdditionalServicesCost = this.calculateTotalAdditionalServicesCost(selectedServices);
+          this.totalAdditionalServicesCostChange.emit(this.totalAdditionalServicesCost);
+          this.formattedServicesText = this.calculateServicesText(selectedServices);
+        });
+    }
   }
 
   // Отписка от всех подписок

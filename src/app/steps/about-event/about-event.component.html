@@ -1,7 +1,7 @@
 <div class="about-event">
   <div class="about-event__container">
     <div class="about-event__steps">
-      <app-stepper></app-stepper>
+      <ng-content select="app-stepper"></ng-content>
     </div>
     <div class="about-event__header">
       <app-header></app-header>
@@ -15,7 +15,7 @@
       </app-summary-info>
     </div>
     <div class="submit-form">
-      <ng-content></ng-content>
+      <ng-content select="app-submit-button"></ng-content>
     </div>
   </div>
 </div>

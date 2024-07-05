@@ -1,11 +1,13 @@
 <ng-container [ngSwitch]="currentView">
   <ng-container *ngSwitchCase="'about'">
     <app-about-event>
+      <app-stepper></app-stepper>
       <app-submit-button [title]="'Продолжить'" (switchView)="switchView()"></app-submit-button>
     </app-about-event>
   </ng-container>
   <ng-container *ngSwitchCase="'contacts'">
     <app-contacts>
+      <app-stepper [activeStepsCount]="2"></app-stepper>
       <app-submit-button [title]="'Отправить заявку'" (switchView)="switchView()"></app-submit-button>
     </app-contacts>
   </ng-container>
