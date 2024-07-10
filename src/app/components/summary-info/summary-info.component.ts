@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit, Input, OnChanges} from '@angular/core';
-import {Subject} from 'rxjs';
+import {Component, OnInit, Input, OnChanges} from '@angular/core';
 import {EventInfoForm} from '../../types/eventForm';
 
 @Component({
@@ -7,7 +6,7 @@ import {EventInfoForm} from '../../types/eventForm';
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
 })
-export class SummaryInfoComponent implements OnInit, OnDestroy, OnChanges {
+export class SummaryInfoComponent implements OnInit, OnChanges {
   @Input() public costPerPerson: number | null = null;
 
   @Input() public totalAdditionalServicesCost: number = 0;
@@ -16,15 +15,8 @@ export class SummaryInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   protected totalPrice: number = 0;
 
-  private destroy$: Subject<void> = new Subject<void>();
-
   public ngOnInit(): void {
     this.updateTotalPrice();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public ngOnChanges(): void {

@@ -1,0 +1,66 @@
+.form-event {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &__title {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 130%;
+    color: var(--dark-blue-color);
+    opacity: 0.8;
+  }
+}
+
+.about-event__header {
+  padding: 60px 0 44px 0;
+}
+
+.mat-mdc-form-field-hint {
+  font-size: 16px;
+  color: var(--dark-blue-color);
+  opacity: 0.5;
+}
+
+
+::ng-deep .mdc-text-field--filled .mdc-line-ripple::after {
+  border-bottom-color: transparent !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+  border-bottom-color: transparent !important;
+}
+
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.main-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 120px;
+}
+
+.chips {
+  cursor: pointer;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 24px;
+  font-weight: 400;
+  font-size: 20px;
+  height: 48px;
+  color: var(--dark-blue-color);
+  background-color: var(--gray-color);
+}
+
+.mat-mdc-standard-chip.mat-primary.mat-mdc-chip-selected{
+  background-color: var(--dark-blue-color);
+  color: var(--light-color);
+}

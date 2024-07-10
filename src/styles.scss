@@ -4,6 +4,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: 'Lab Grotesque', sans-serif;
 }
 
 :root {
@@ -19,7 +20,6 @@
 
 body {
   background: var(--light-color);
-  font-family: 'Lab Grotesque', sans-serif;
 }
 
 .error {
@@ -28,12 +28,69 @@ body {
   color: var(--acent-error-color);
 }
 
-input.ng-touched.ng-invalid {
-  border: 1px solid var(--acent-error-color) !important;
-  background: var(--light-error-color);
+mat-form-field {
+  width: 780px;
+  height: 80px;
 }
 
-select.ng-touched.ng-invalid {
-  border: 1px solid var(--acent-error-color) !important;
-  background: var(--light-error-color);
+//input.ng-touched.ng-invalid  {
+//  border: 1px solid var(--acent-error-color) !important;
+//  background: var(--light-error-color);
+//}
+//
+//select.ng-touched.ng-invalid {
+//  border: 1px solid var(--acent-error-color) !important;
+//  background: var(--light-error-color);
+//}
+
+.mat-stepper-horizontal-line {
+  display: none;
+}
+
+.mat-horizontal-stepper-header {
+  display: flex;
+  justify-content: space-between;
+
+  .mat-step-icon {
+    margin-right: 20px !important;
+  }
+}
+
+.mat-step-icon {
+  background: var(--gray-color) !important;
+  color: var(--light-color) !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50%;
+  border: none;
+
+  &-selected,
+  &-number {
+    background: var(--dark-blue-color) !important;
+  }
+
+  &-content {
+    span { /* Выбираем элемент с номером */
+      font-weight: 500;
+      font-size: 20px !important;
+    }
+  }
+
+  &:not(.mat-step-icon-selected) {
+    .mat-step-icon-content {
+      span {
+        opacity: 0.5;
+        color: var(--dark-blue-color);
+      }
+    }
+  }
+}
+
+.mat-step-header {
+  background-color: transparent !important;
+}
+
+.mat-step-label {
+  font-weight: 500;
+  font-size: 20px;
 }

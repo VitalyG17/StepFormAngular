@@ -1,0 +1,34 @@
+<ng-content select="mat-horizontal-stepper"></ng-content>
+<div class="contacts__header">
+  <app-header [title]="'Расскажите о себе'"></app-header>
+</div>
+<div class="main-info">
+<form class="form-contacts" [formGroup]="aboutInfoForm">
+<!--Ваше имя-->
+  <div class="form-contacts__group">
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Ваше имя</mat-label>
+      <input type="text" matInput required [formControl]="aboutInfoForm.controls.userName">
+      <mat-error *ngIf="aboutInfoForm.controls.userName.hasError('required') && aboutInfoForm.controls.userName.touched" class="error">Обязательное поле</mat-error>
+    </mat-form-field>
+  </div>
+<!--Мобильный телефон-->
+  <div class="form-contacts__group">
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Мобильный телефон</mat-label>
+      <input type="tel" appPhoneMask matInput required [formControl]="aboutInfoForm.controls.phoneNumber">
+      <mat-error *ngIf="aboutInfoForm.controls.phoneNumber.hasError('required') && aboutInfoForm.controls.phoneNumber.touched" class="error">Обязательное поле</mat-error>
+    </mat-form-field>
+  </div>
+<!--Электронная почта-->
+  <div class="form-contacts__group">
+    <mat-form-field>
+      <mat-label>Электронная почта</mat-label>
+      <input type="email" matInput [formControl]="aboutInfoForm.controls.email">
+      <mat-error *ngIf="aboutInfoForm.controls.email.hasError('email') || aboutInfoForm.controls.email.touched" class="error">Неверный формат электронной почты</mat-error>
+    </mat-form-field>
+  </div>
+</form>
+<ng-content select="app-summary-info"></ng-content>
+</div>
+<ng-content select="app-material-submit-button"></ng-content>

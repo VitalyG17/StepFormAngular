@@ -1,0 +1,26 @@
+.wrapper-info {
+  padding: 70px;
+}
+
+.container-info {
+  background: var(--light-gray-color);
+  border: 1px dashed var(--violet-color);
+  border-radius: 30px;
+  padding: 70px;
+}
+
+
+mat-stepper {
+  background: transparent;
+}
+
+
+
+//.about-event {
+//  padding: 70px;
+//  &__container {
+//    background: var(--light-gray-color);
+//    border: 1px dashed var(--violet-color);
+//    border-radius: 30px;
+//    padding: 70px;
+//  }
