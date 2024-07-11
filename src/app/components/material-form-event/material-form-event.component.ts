@@ -8,7 +8,6 @@ import {
   NG_VALUE_ACCESSOR,
   Validators,
 } from '@angular/forms';
-import {FormEventComponent} from '../form-event/form-event.component';
 import {EventFormType, EventInfoFormValue} from '../../types/eventForm';
 import {ServerResponse} from '../../types/serverResponse';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
@@ -22,7 +21,7 @@ import {EventFormatService} from '../../services/event-format.service';
     HttpService,
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FormEventComponent),
+      useExisting: forwardRef(() => MaterialFormEventComponent),
       multi: true,
     },
   ],

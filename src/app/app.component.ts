@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {MaterialFormContactsComponent} from './components/material-form-contacts/material-form-contacts.component';
 import {MaterialFormEventComponent} from './components/material-form-event/material-form-event.component';
+import {MatStepper} from '@angular/material/stepper';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import {MaterialFormEventComponent} from './components/material-form-event/mater
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  @ViewChild('stepper') protected stepper: {selectedIndex: number} | undefined;
+  @ViewChild('stepper') protected stepper: MatStepper | undefined;
 
   @ViewChild(MaterialFormContactsComponent) protected contactsForm: MaterialFormContactsComponent | undefined;
 
