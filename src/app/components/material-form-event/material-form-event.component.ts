@@ -71,7 +71,7 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
 
   public ngOnInit(): void {
     this.eventFormatService
-      .getEventFormats('eventFormat')
+      .getEventFormats()
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: ServerResponse[]) => {
         this.eventName = data;

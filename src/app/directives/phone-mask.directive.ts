@@ -8,10 +8,9 @@ export class PhoneMaskDirective {
 
   constructor(private el: ElementRef) {}
 
-  @HostListener('input', ['$event'])
-  public onInput(event: Event): void {
-    const input: HTMLInputElement = event.target as HTMLInputElement;
-    const inputValue: string = input.value.replace(/\D/g, '');
+  @HostListener('input', ['$event.target'])
+  public onInput(event: HTMLInputElement): void {
+    const inputValue: string = event.value.replace(/\D/g, '');
     let formattedValue: string = '+7 (';
 
     if (inputValue.length > 1) {
@@ -31,10 +30,9 @@ export class PhoneMaskDirective {
     this.previousValue = formattedValue;
   }
 
-  @HostListener('blur', ['$event'])
-  public onBlur(event: Event): void {
-    const input: HTMLInputElement = event.target as HTMLInputElement;
-    const inputValue: string = input.value;
+  @HostListener('blur', ['$event.target'])
+  public onBlur(event: HTMLInputElement): void {
+    const inputValue: string = event.value;
 
     if (inputValue.length !== 18) {
       this.el.nativeElement.value = this.previousValue;

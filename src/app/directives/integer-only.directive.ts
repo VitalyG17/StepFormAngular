@@ -6,14 +6,14 @@ import {Directive, HostListener, Input} from '@angular/core';
 export class IntegerOnlyDirective {
   @Input() public appIntegerOnly: string | undefined;
 
-  @HostListener('input', ['$event']) protected onInputChange(event: KeyboardEvent): void {
-    const target: HTMLInputElement = event.target as HTMLInputElement;
-    const intValue: number = parseInt(target.value, 10);
+  @HostListener('input', ['$event.target'])
+  protected onInputChange(event: HTMLInputElement): void {
+    const intValue: number = parseInt(event.value, 10);
 
     if (intValue >= 0) {
-      target.value = intValue.toString();
+      event.value = intValue.toString();
     } else {
-      target.value = '';
+      event.value = '';
     }
   }
 }
