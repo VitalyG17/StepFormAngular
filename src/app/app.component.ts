@@ -19,7 +19,7 @@ export class AppComponent {
   protected isEditable: boolean = true;
 
   public get selectedEventCost(): number | null {
-    return this.eventForm ? this.eventForm.selectedEventCost : null;
+    return this.eventForm ? this.eventForm.selectedEventCost : 0;
   }
 
   public get totalAdditionalServicesCost(): number {
