@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, OnChanges} from '@angular/core';
-import {EventInfoForm} from '../../types/eventForm';
+
+export type NullUnd = null | undefined;
 
 @Component({
   selector: 'app-summary-info',
@@ -7,15 +8,15 @@ import {EventInfoForm} from '../../types/eventForm';
   styleUrls: ['./summary-info.component.scss'],
 })
 export class SummaryInfoComponent implements OnInit, OnChanges {
-  @Input() public costPerPerson: number | null = null;
+  @Input() public costPerPerson: number | NullUnd = null;
 
   @Input() public totalAdditionalServicesCost: number = 0;
 
-  @Input() public countGuests: number | null = null;
+  @Input() public countGuests: number | NullUnd = null;
 
-  @Input() public date: Date | null = null;
+  @Input() public date: Date | NullUnd = null;
 
-  @Input() public formEventName: string | null = null;
+  @Input() public formEventName: string | NullUnd = null;
 
   protected totalPrice: number = 0;
 
