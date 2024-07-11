@@ -4,8 +4,12 @@
           <mat-step [stepControl]="eventForm.eventInfoForm" [editable]="isEditable">
             <ng-template matStepLabel>Мероприятие</ng-template>
             <app-material-form-event #eventForm>
-              <app-summary-info [formState]="formData"  [costPerPerson]="selectedEventCost"
-                                [totalAdditionalServicesCost]="totalAdditionalServicesCost">
+              <app-summary-info
+                [costPerPerson]="selectedEventCost"
+                [totalAdditionalServicesCost]="totalAdditionalServicesCost"
+                [date]="selectDate"
+                [countGuests]="selectCountGuest"
+                [formEventName]="selectedEventName">
               </app-summary-info>
             </app-material-form-event>
             <app-material-submit-button [title]="'Продолжить'" ></app-material-submit-button>
@@ -13,8 +17,12 @@
           <mat-step [stepControl]="contactsForm.aboutInfoForm" [editable]="isEditable">
             <ng-template matStepLabel>Контакты</ng-template>
             <app-material-form-contacts #contactsForm>
-              <app-summary-info [formState]="formData" [costPerPerson]="selectedEventCost"
-                                [totalAdditionalServicesCost]="totalAdditionalServicesCost">
+              <app-summary-info
+                [costPerPerson]="selectedEventCost"
+                [totalAdditionalServicesCost]="totalAdditionalServicesCost"
+                [date]="selectDate"
+                [countGuests]="selectCountGuest"
+                [formEventName]="selectedEventName">
               </app-summary-info>
             </app-material-form-contacts>
             <app-material-submit-button [title]="'Отправить заявку'"></app-material-submit-button>
@@ -22,4 +30,3 @@
         </mat-stepper>
       </div>
  </div>
-

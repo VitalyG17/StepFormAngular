@@ -28,15 +28,15 @@ import {EventFormatService} from '../../services/event-format.service';
   ],
 })
 export class MaterialFormEventComponent implements OnInit, ControlValueAccessor {
+  public selectedEventCost: number = 0; // Стоимость выбранного мероприятия
+
+  public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
+
   protected startDate: Date = new Date(2024, 0, 1); // Начальная дата выбора календаря
 
   protected eventName: ServerResponse[] = []; // Название мероприятия
 
   protected addServices: ServerResponse[] = []; // Дополнительные услуги
-
-  public selectedEventCost: number = 0; // Стоимость выбранного мероприятия
-
-  public totalAdditionalServicesCost: number = 0; // Общая стоимость выбранных доп услуг
 
   private destroy$: Subject<void> = new Subject<void>(); // Для управления подписками
 
@@ -56,19 +56,16 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
   private onChange?: (value: EventInfoFormValue) => void;
   protected onTouched?: () => void;
 
-  // Установка значения формы извне
   public writeValue(value: EventInfoFormValue): void {
     this.eventInfoForm.patchValue(value);
   }
 
-  // Обработчик изменений в форме
   public registerOnChange(fn: (value: EventInfoFormValue) => void): void {
     this.onChange = (value: EventInfoFormValue): void => {
       fn(value);
     };
   }
 
-  // Обработчик потери фокуса в форме
   public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
@@ -113,11 +110,7 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
         });
     }
 
-    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
-      console.log(this.eventInfoForm.value);
-      console.log(this.selectedEventCost);
-      console.log(this.totalAdditionalServicesCost);
-    });
+    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {});
   }
 
   // Метод для получения текста для отображения в label select

@@ -1,6 +1,5 @@
-import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, Validators} from '@angular/forms';
-import {FormStatusService} from '../../services/form-status.service';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 
 interface AboutInfoForm {
@@ -15,11 +14,7 @@ interface AboutInfoForm {
   styleUrls: ['./material-form-contacts.component.scss'],
 })
 export class MaterialFormContactsComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  @Output() public readonly formSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   protected onTouched: (() => void) | undefined;
-
-  private formStatusService: FormStatusService = inject(FormStatusService);
 
   private onChange: ((value: AboutInfoForm) => void) | undefined;
 
@@ -32,11 +27,7 @@ export class MaterialFormContactsComponent implements OnInit, OnDestroy, Control
   });
 
   public ngOnInit(): void {
-    this.aboutInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
-      const isValid: boolean = this.aboutInfoForm.valid;
-      this.formStatusService.setFormValid(isValid);
-      console.log(this.aboutInfoForm.value);
-    });
+    this.aboutInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {});
   }
 
   public ngOnDestroy(): void {

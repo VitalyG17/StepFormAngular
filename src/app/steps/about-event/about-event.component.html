@@ -10,7 +10,7 @@
       <app-form-event [(ngModel)]="formData" (selectedEventCostChange)="selectedEventCost = $event"
                       (totalAdditionalServicesCostChange)="totalAdditionalServicesCost = $event">
       </app-form-event>
-      <app-summary-info [formState]="formData" [costPerPerson]="selectedEventCost"
+      <app-summary-info  [costPerPerson]="selectedEventCost"
                         [totalAdditionalServicesCost]="totalAdditionalServicesCost">
       </app-summary-info>
     </div>

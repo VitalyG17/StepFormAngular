@@ -11,7 +11,11 @@ export class SummaryInfoComponent implements OnInit, OnChanges {
 
   @Input() public totalAdditionalServicesCost: number = 0;
 
-  @Input() public formState: EventInfoForm | null = null;
+  @Input() public countGuests: number | null = null;
+
+  @Input() public date: Date | null = null;
+
+  @Input() public formEventName: string | null = null;
 
   protected totalPrice: number = 0;
 
@@ -24,10 +28,11 @@ export class SummaryInfoComponent implements OnInit, OnChanges {
   }
 
   private updateTotalPrice(): void {
-    const guestsCount: number = this.formState ? Number(this.formState.countGuests) : 0;
-    this.totalPrice = guestsCount * (this.costPerPerson ?? 0) + this.totalAdditionalServicesCost;
-    if (this.totalPrice < 0) {
-      this.totalPrice = 0;
+    if (this.countGuests) {
+      this.totalPrice = this.countGuests * (this.costPerPerson ?? 0) + this.totalAdditionalServicesCost;
+      if (this.totalPrice < 0) {
+        this.totalPrice = 0;
+      }
     }
   }
 }

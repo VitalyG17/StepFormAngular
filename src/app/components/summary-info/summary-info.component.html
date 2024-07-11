@@ -11,15 +11,15 @@
       <div class="form-data">
         <div class="form-data__format">
           <span class="form-data__this-data">Формат:</span>
-          <span class="form-data__received-data">{{ formState?.formEventName }} </span>
+          <span class="form-data__received-data">{{ formEventName }} </span>
         </div>
         <div class="form-data__count">
           <span class="form-data__this-data">Количество гостей:</span>
-          <span class="form-data__received-data">{{ formState?.countGuests }}</span>
+          <span class="form-data__received-data">{{ countGuests }}</span>
         </div>
         <div class="form-data__date">
           <span class="form-data__this-data">Дата:</span>
-          <span class="form-data__received-data">{{ (formState?.date)?.toString() | date: 'dd.MM.yyyy' }}</span>
+          <span class="form-data__received-data">{{ (date)?.toString() | date: 'dd.MM.yyyy' }}</span>
         </div>
       </div>
     </div>
