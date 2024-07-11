@@ -4,7 +4,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SubmitButtonComponent} from './components/submit-button/submit-button.component';
 import {HttpClientModule} from '@angular/common/http';
 import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
 import {PhoneMaskDirective} from './directives/phone-mask.directive';
@@ -46,7 +45,6 @@ export const MY_DATE_FORMATS: MatDateFormats = {
 @NgModule({
   declarations: [
     AppComponent,
-    SubmitButtonComponent,
     SummaryInfoComponent,
     PhoneMaskDirective,
     RubCurrencyPipe,

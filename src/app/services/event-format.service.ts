@@ -10,7 +10,7 @@ export class EventFormatService {
   constructor(private readonly http: HttpClient) {}
 
   public getEventFormats(): Observable<ServerResponse[]> {
-    return this.http.get<ServerResponse[]>(this.url + '/event').pipe(
+    return this.http.get<ServerResponse[]>(this.url + '/eventFormat').pipe(
       catchError((err: unknown) => {
         console.error('Error!', err);
         return of([]);
