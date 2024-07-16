@@ -30,6 +30,9 @@ import {IntegerOnlyDirective} from './directives/integer-only.directive';
 import {MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDateFormats} from '@angular/material/core';
 import {HeaderComponent} from './components/header/header.component';
 
+import {AngularFireModule} from '@angular/fire/compat';
+import {environment} from '../../environment';
+
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -73,6 +76,7 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MatButtonToggleModule,
     MatNativeDateModule,
     MatChipsModule,
+    AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [
     EventFormatService,
