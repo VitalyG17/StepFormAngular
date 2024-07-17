@@ -32,6 +32,7 @@ import {HeaderComponent} from './components/header/header.component';
 
 import {AngularFireModule} from '@angular/fire/compat';
 import {environment} from '../../environment';
+import {SubmittingFormDataService} from './services/submitting-form-data.service';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -81,6 +82,7 @@ export const MY_DATE_FORMATS: MatDateFormats = {
   providers: [
     EventFormatService,
     FormStatusService,
+    SubmittingFormDataService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS},
   ],

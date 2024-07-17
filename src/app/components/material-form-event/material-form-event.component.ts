@@ -109,9 +109,7 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
         });
     }
 
-    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
-      console.log(this.eventInfoForm.value);
-    });
+    this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {});
   }
 
   // Метод для получения текста для отображения в label select

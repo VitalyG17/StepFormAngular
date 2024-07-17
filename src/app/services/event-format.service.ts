@@ -5,7 +5,7 @@ import {ServerResponse} from '../types/serverResponse';
 
 @Injectable()
 export class EventFormatService {
-  private readonly url: string = '  https://forms-6abb9-default-rtdb.europe-west1.firebasedatabase.app';
+  private readonly url: string = 'https://forms-6abb9-default-rtdb.europe-west1.firebasedatabase.app';
 
   constructor(private readonly http: HttpClient) {}
 
