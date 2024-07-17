@@ -5,7 +5,7 @@ import {MatStepper} from '@angular/material/stepper';
 import {NullUnd} from './components/summary-info/summary-info.component';
 import {SubmittingFormDataService} from './services/submitting-form-data.service';
 import {EventInfoFormValue, FormData} from './types/eventForm';
-import {Subject, takeUntil} from 'rxjs';
+import {catchError, of, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 
 import {SnackbarService} from './services/snackbar.service';
 
@@ -24,6 +24,8 @@ export class AppComponent implements OnDestroy {
   protected isEditable: boolean = true;
 
   private readonly formDataService: SubmittingFormDataService = inject(SubmittingFormDataService);
+
+  private readonly snackbarService: SnackbarService = inject(SnackbarService);
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -46,27 +48,45 @@ export class AppComponent implements OnDestroy {
   public get selectedEventName(): string | NullUnd {
     return this.eventForm ? this.eventForm.eventInfoForm.get('formEventName')?.value : null;
   }
-  constructor(private snackbarService: SnackbarService) {}
-  public onSubmit(): void {
+
+  protected onSubmit(): void {
     if (this.eventForm && this.contactsForm) {
       const eventFormData: Partial<EventInfoFormValue> = this.eventForm.eventInfoForm.value;
+
       const contactsFormData: Partial<FormData> = this.contactsForm.aboutInfoForm.value;
 
       const formData: FormData = {...eventFormData, ...contactsFormData};
 
-      this.formDataService
-        .postData(formData)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (response: Object) => {
-            this.snackbarService.successShow('Данные успешно отправлены!', 'Успех!');
-            console.log(response);
-          },
-          error: (error: unknown) => {
-            this.snackbarService.errorShow('Ошибка при отправке данных!', 'Ошибка!');
-            console.log(error);
-          },
-        });
+      if (formData.date && formData.userName && formData.email) {
+        const formattedDate: string = new Date(formData.date).toLocaleDateString('ru-RU');
+
+        this.formDataService
+          .checkExistingBooking(formData.userName, formData.email, formattedDate)
+          .pipe(
+            switchMap((isBooked: boolean) => {
+              if (isBooked) {
+                return throwError(
+                  () => new Error(`Вы уже забронировали мероприятие на имя ${formData.userName} на ${formattedDate}`),
+                );
+              } else {
+                return this.formDataService.postData(formData);
+              }
+            }),
+            catchError((error) => {
+              this.snackbarService.errorShow(error.message, 'Ошибка!');
+              return of(null);
+            }),
+            takeUntil(this.destroy$),
+          )
+          .subscribe({
+            next: (response: Object | null) => {
+              if (response) {
+                this.snackbarService.successShow('Ваша заявка успешно отправлена!', 'Успех!');
+                console.log(response);
+              }
+            },
+          });
+      }
     }
   }
 
