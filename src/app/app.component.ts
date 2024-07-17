@@ -7,6 +7,8 @@ import {SubmittingFormDataService} from './services/submitting-form-data.service
 import {EventInfoFormValue, FormData} from './types/eventForm';
 import {Subject, takeUntil} from 'rxjs';
 
+import {SnackbarService} from './services/snackbar.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -44,7 +46,7 @@ export class AppComponent implements OnDestroy {
   public get selectedEventName(): string | NullUnd {
     return this.eventForm ? this.eventForm.eventInfoForm.get('formEventName')?.value : null;
   }
-
+  constructor(private snackbarService: SnackbarService) {}
   public onSubmit(): void {
     if (this.eventForm && this.contactsForm) {
       const eventFormData: Partial<EventInfoFormValue> = this.eventForm.eventInfoForm.value;
@@ -57,10 +59,12 @@ export class AppComponent implements OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response: Object) => {
-            console.log('Данные успешно отправлены!', response);
+            this.snackbarService.successShow('Данные успешно отправлены!', 'Успех!');
+            console.log(response);
           },
           error: (error: unknown) => {
-            console.error('Ошибка при отправке данных!', error);
+            this.snackbarService.errorShow('Ошибка при отправке данных!', 'Ошибка!');
+            console.log(error);
           },
         });
     }

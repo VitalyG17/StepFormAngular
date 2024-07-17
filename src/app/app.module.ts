@@ -11,7 +11,7 @@ import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
 import {NgOptimizedImage} from '@angular/common';
 import {EventFormatService} from './services/event-format.service';
 import {FormStatusService} from './services/form-status.service';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatButtonModule} from '@angular/material/button';
@@ -33,6 +33,7 @@ import {HeaderComponent} from './components/header/header.component';
 import {AngularFireModule} from '@angular/fire/compat';
 import {environment} from '../../environment';
 import {SubmittingFormDataService} from './services/submitting-form-data.service';
+import {ToastrModule} from 'ngx-toastr';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -78,6 +79,8 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MatNativeDateModule,
     MatChipsModule,
     AngularFireModule.initializeApp(environment.firebase),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     EventFormatService,
