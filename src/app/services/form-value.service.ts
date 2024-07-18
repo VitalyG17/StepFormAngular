@@ -6,7 +6,7 @@ import {FormData} from '../types/eventForm';
 @Injectable()
 export class FormValueService {
   private readonly databaseUrl: string =
-    'https://forms-6abb9-default-rtdb.europe-west1.firebasedatabase.app/bookingInfo.json';
+    'https://forms-6abb9-default-rtdb.europe-west1.firebasedatabase.app/bookingInfo';
 
   constructor(private readonly http: HttpClient) {}
 
@@ -35,7 +35,7 @@ export class FormValueService {
 
   private createData(data: FormData): Observable<Object> {
     const headers: HttpHeaders = new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application',
     });
     return this.http.post(this.databaseUrl, data, {headers});
   }

@@ -10,12 +10,12 @@ export class HttpService {
   constructor(private readonly http: HttpClient) {}
 
   public getAddServices(): Observable<ServerResponse[]> {
-    return this.http.get<{[key: string]: ServerResponse}>(this.url + '/addServices.json').pipe(
+    return this.http.get<{[key: string]: ServerResponse}>(this.url + '/addServices').pipe(
       catchError((err: unknown) => {
         console.error('Error!', err);
         return of([]);
       }),
-      map((data: {[p: string]: ServerResponse} | never[]) => Object.values(data)),
+      map((data: {[p: string]: ServerResponse} | string[]) => Object.values(data)),
     );
   }
 }

@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
 import {PhoneMaskDirective} from './directives/phone-mask.directive';
 import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
@@ -34,6 +34,7 @@ import {AngularFireModule} from '@angular/fire/compat';
 import {environment} from '../../environment';
 import {ToastrModule} from 'ngx-toastr';
 import {SnackbarService} from './services/snackbar.service';
+import {JsonInterceptorService} from './services/json-interceptor.service';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -89,6 +90,7 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     SnackbarService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS},
+    {provide: HTTP_INTERCEPTORS, useClass: JsonInterceptorService, multi: true},
   ],
   bootstrap: [AppComponent],
 })

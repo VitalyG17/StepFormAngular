@@ -27,7 +27,7 @@ export class AppComponent implements OnDestroy {
 
   private readonly snackbarService: SnackbarService = inject(SnackbarService);
 
-  private destroy$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
   public get selectedEventCost(): number | null {
     return this.eventForm ? this.eventForm.selectedEventCost : 0;
