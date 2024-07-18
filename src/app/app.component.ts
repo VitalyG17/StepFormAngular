@@ -4,7 +4,7 @@ import {MaterialFormEventComponent} from './components/material-form-event/mater
 import {MatStepper} from '@angular/material/stepper';
 import {NullUnd} from './components/summary-info/summary-info.component';
 import {FormValueService} from './services/form-value.service';
-import {EventInfoFormValue, FormData} from './types/eventForm';
+import {FormData} from './types/eventForm';
 import {Subject, takeUntil} from 'rxjs';
 
 import {SnackbarService} from './services/snackbar.service';
@@ -51,9 +51,9 @@ export class AppComponent implements OnDestroy {
 
   protected onSubmit(): void {
     if (this.eventForm && this.contactsForm) {
-      const eventFormData: Partial<EventInfoFormValue> = this.eventForm.eventInfoForm.value;
+      const eventFormData: FormData = this.eventForm.eventInfoForm.value;
 
-      const contactsFormData: Partial<FormData> = this.contactsForm.aboutInfoForm.value;
+      const contactsFormData: FormData = this.contactsForm.aboutInfoForm.value;
 
       const formData: FormData = {...eventFormData, ...contactsFormData};
 
