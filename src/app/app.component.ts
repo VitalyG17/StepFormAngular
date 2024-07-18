@@ -72,15 +72,17 @@ export class AppComponent implements OnDestroy {
                 return this.formDataService.postData(formData);
               }
             }),
-            catchError((error) => {
-              this.snackbarService.errorShow(error.message, 'Ошибка!');
+            catchError((error: unknown) => {
+              if (error instanceof Error) {
+                this.snackbarService.errorShow(error.message, 'Ошибка!');
+              }
               return of(null);
             }),
             takeUntil(this.destroy$),
           )
           .subscribe({
             next: (response: Object | null) => {
-              if (response && this.stepper) {
+              if (response) {
                 this.snackbarService.successShow('Ваша заявка успешно отправлена!', 'Успех!');
                 console.log(response);
                 setTimeout(() => {
