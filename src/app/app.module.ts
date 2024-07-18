@@ -29,11 +29,11 @@ import {MatChipsModule} from '@angular/material/chips';
 import {IntegerOnlyDirective} from './directives/integer-only.directive';
 import {MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDateFormats} from '@angular/material/core';
 import {HeaderComponent} from './components/header/header.component';
-
+import {FormValueService} from './services/form-value.service';
 import {AngularFireModule} from '@angular/fire/compat';
 import {environment} from '../../environment';
-import {SubmittingFormDataService} from './services/submitting-form-data.service';
 import {ToastrModule} from 'ngx-toastr';
+import {SnackbarService} from './services/snackbar.service';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -84,8 +84,9 @@ export const MY_DATE_FORMATS: MatDateFormats = {
   ],
   providers: [
     EventFormatService,
+    FormValueService,
     FormStatusService,
-    SubmittingFormDataService,
+    SnackbarService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS},
   ],

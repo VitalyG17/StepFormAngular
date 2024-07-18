@@ -3,9 +3,9 @@ import {MaterialFormContactsComponent} from './components/material-form-contacts
 import {MaterialFormEventComponent} from './components/material-form-event/material-form-event.component';
 import {MatStepper} from '@angular/material/stepper';
 import {NullUnd} from './components/summary-info/summary-info.component';
-import {SubmittingFormDataService} from './services/submitting-form-data.service';
+import {FormValueService} from './services/form-value.service';
 import {EventInfoFormValue, FormData} from './types/eventForm';
-import {catchError, of, Subject, switchMap, takeUntil, throwError} from 'rxjs';
+import {Subject, takeUntil} from 'rxjs';
 
 import {SnackbarService} from './services/snackbar.service';
 
@@ -23,7 +23,7 @@ export class AppComponent implements OnDestroy {
 
   protected isEditable: boolean = true;
 
-  private readonly formDataService: SubmittingFormDataService = inject(SubmittingFormDataService);
+  private readonly formValueService: FormValueService = inject(FormValueService);
 
   private readonly snackbarService: SnackbarService = inject(SnackbarService);
 
@@ -57,41 +57,23 @@ export class AppComponent implements OnDestroy {
 
       const formData: FormData = {...eventFormData, ...contactsFormData};
 
-      if (formData.date && formData.userName && formData.email) {
-        const formattedDate: string = new Date(formData.date).toLocaleDateString('ru-RU');
-
-        this.formDataService
-          .checkExistingBooking(formData.userName, formData.email, formattedDate)
-          .pipe(
-            switchMap((isBooked: boolean) => {
-              if (isBooked) {
-                return throwError(
-                  () => new Error(`Вы уже забронировали мероприятие на имя ${formData.userName} на ${formattedDate}`),
-                );
-              } else {
-                return this.formDataService.postData(formData);
-              }
-            }),
-            catchError((error: unknown) => {
-              if (error instanceof Error) {
-                this.snackbarService.errorShow(error.message, 'Ошибка!');
-              }
-              return of(null);
-            }),
-            takeUntil(this.destroy$),
-          )
-          .subscribe({
-            next: (response: Object | null) => {
-              if (response) {
-                this.snackbarService.successShow('Ваша заявка успешно отправлена!', 'Успех!');
-                console.log(response);
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1500);
-              }
-            },
-          });
-      }
+      this.formValueService
+        .submitBooking(formData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response: Object | null) => {
+            if (response) {
+              this.snackbarService.successShow('Ваша заявка успешно отправлена!', 'Успех!');
+            } else {
+              this.snackbarService.warningShow('Пожалуйста, заполните все обязательные поля формы.', 'Внимание!');
+            }
+          },
+          error: (error: unknown) => {
+            if (error instanceof Error) {
+              this.snackbarService.errorShow(error.message, 'Ошибка!');
+            }
+          },
+        });
     }
   }
 
