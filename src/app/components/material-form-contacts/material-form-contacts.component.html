@@ -22,10 +22,11 @@
   </div>
 <!--Электронная почта-->
   <div class="form-contacts__group">
-    <mat-form-field>
+    <mat-form-field hideRequiredMarker>
       <mat-label>Электронная почта</mat-label>
       <input type="email" matInput [formControl]="aboutInfoForm.controls.email">
       <mat-error *ngIf="aboutInfoForm.controls.email.hasError('email') || aboutInfoForm.controls.email.touched" class="error">Неверный формат электронной почты</mat-error>
+      <mat-error *ngIf="aboutInfoForm.controls.email.hasError('required') && aboutInfoForm.controls.email.touched" class="error">Обязательное поле</mat-error>
     </mat-form-field>
   </div>
 </form>

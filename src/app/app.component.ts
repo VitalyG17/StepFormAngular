@@ -80,9 +80,12 @@ export class AppComponent implements OnDestroy {
           )
           .subscribe({
             next: (response: Object | null) => {
-              if (response) {
+              if (response && this.stepper) {
                 this.snackbarService.successShow('Ваша заявка успешно отправлена!', 'Успех!');
                 console.log(response);
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1500);
               }
             },
           });

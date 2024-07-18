@@ -23,7 +23,7 @@ export class MaterialFormContactsComponent implements OnInit, OnDestroy, Control
   public readonly aboutInfoForm: FormGroup<AboutInfoForm> = new FormGroup<AboutInfoForm>({
     userName: new FormControl(null, Validators.required),
     phoneNumber: new FormControl(null, Validators.required),
-    email: new FormControl(null, Validators.email),
+    email: new FormControl(null, [Validators.email, Validators.required]),
   });
 
   public ngOnInit(): void {
