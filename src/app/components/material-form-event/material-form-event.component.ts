@@ -1,4 +1,4 @@
-import {Component, forwardRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, inject, OnInit} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {
   AbstractControl,
@@ -17,6 +17,7 @@ import {EventFormatService} from '../../services/event-format.service';
   selector: 'app-material-form-event',
   templateUrl: './material-form-event.component.html',
   styleUrls: ['./material-form-event.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     HttpService,
     {
@@ -42,6 +43,8 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
   private readonly dataService: HttpService = inject(HttpService); // Сервис для получения информации о доп услугах
 
   private readonly eventFormatService: EventFormatService = inject(EventFormatService); // Cервис для получения форматов мероприятий
+
+  private changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   public readonly eventInfoForm: FormGroup<EventFormType> = new FormGroup<EventFormType>({
     formEventName: new FormControl(null, Validators.required),
@@ -75,6 +78,7 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: ServerResponse[]) => {
         this.eventName = data;
+        this.changeDetectorRef.markForCheck();
       });
 
     this.dataService

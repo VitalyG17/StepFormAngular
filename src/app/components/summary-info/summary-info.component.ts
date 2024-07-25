@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, OnChanges} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, ChangeDetectionStrategy} from '@angular/core';
 
 export type NullUnd = null | undefined;
 
@@ -6,6 +6,7 @@ export type NullUnd = null | undefined;
   selector: 'app-summary-info',
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryInfoComponent implements OnInit, OnChanges {
   @Input() public costPerPerson: number | NullUnd = null;
