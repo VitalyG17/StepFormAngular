@@ -1,60 +1,60 @@
 <ng-content select="mat-horizontal-stepper"></ng-content>
-  <div class="about-event__header">
-    <app-header></app-header>
-  </div>
+<div class="about-event__header">
+  <app-header></app-header>
+</div>
 <div class="main-info">
-<form class="form-event" [formGroup]="eventInfoForm">
-  <span class="form-event__title">Выберите формат мероприятия</span>
-<!--Выбор типа мероприятия-->
-  <mat-chip-listbox [formControl]="eventInfoForm.controls.formEventName">
-    <ng-container *ngFor="let listEventName of eventName">
-      <mat-chip-option class="chips" [value]="listEventName.name">{{ listEventName.name }}</mat-chip-option>
-    </ng-container>
-  </mat-chip-listbox>
-<!--Количесвто гостей-->
-  <div class="form-event__group">
-    <mat-form-field hideRequiredMarker>
-      <mat-label>Количество гостей</mat-label>
-      <input type="number" matInput required appIntegerOnly [formControl]="eventInfoForm.controls.countGuests" min="10" max="100">
-      <mat-hint align="start">От 10 человек</mat-hint>
-      <mat-hint align="end">До 100 человек</mat-hint>
-      <mat-error *ngIf="eventInfoForm.controls.countGuests.hasError('required') && eventInfoForm.controls.countGuests.touched" class="error">Обязательное поле</mat-error>
-      <mat-error *ngIf="eventInfoForm.controls.countGuests.hasError('min') && eventInfoForm.controls.countGuests.touched" class="error">Количество гостей меньше минимального</mat-error>
-      <mat-error *ngIf="eventInfoForm.controls.countGuests.hasError('max') && eventInfoForm.controls.countGuests.touched" class="error">Количество гостей больше максимального</mat-error>
-    </mat-form-field>
-  </div>
-<!--Выбор даты-->
-  <div class="form-event__group">
-    <mat-form-field hideRequiredMarker>
-      <mat-label>Дата мероприятия</mat-label>
-      <input matInput required  [matDatepicker]="picker" [formControl]="eventInfoForm.controls.date">
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker startView="year" [startAt]="startDate" ></mat-datepicker>
-      <mat-error *ngIf="eventInfoForm.controls.date.hasError('required') && eventInfoForm.controls.date.touched" class="error">Обязательное поле</mat-error>
-    </mat-form-field>
-  </div>
-  <!--Выбор доп услуг-->
-  <div class="form-event__group">
-    <mat-form-field>
-      <mat-label>Дополнительные услуги</mat-label>
-      <mat-select [formControl]="eventInfoForm.controls.additionService" multiple>
-        <mat-select-trigger>
-          {{ getAdditionalServicesText() }}
-        </mat-select-trigger>
-        <mat-option *ngFor="let service of addServices" [value]="service.name">
-          {{ service.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-<!--Пожелания меню-->
-  <div class="form-event__group">
-    <mat-form-field>
-      <mat-label>Напишите пожелания по меню</mat-label>
-      <input type="text" matInput [formControl]="eventInfoForm.controls.menuWishes">
-    </mat-form-field>
-  </div>
-</form>
-<ng-content select="app-summary-info"></ng-content>
+  <form class="form-event" [formGroup]="eventInfoForm">
+    <span class="form-event__title">Выберите формат мероприятия</span>
+    <!--Выбор типа мероприятия-->
+    <mat-chip-listbox [formControl]="eventInfoForm.controls.formEventName">
+      <ng-container *ngFor="let listEventName of eventName">
+        <mat-chip-option class="chips" [value]="listEventName.name">{{ listEventName.name }}</mat-chip-option>
+      </ng-container>
+    </mat-chip-listbox>
+    <!--Количесвто гостей-->
+    <div class="form-event__group">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Количество гостей</mat-label>
+        <input type="number" matInput required appIntegerOnly [formControl]="eventInfoForm.controls.countGuests" min="10" max="100">
+        <mat-hint align="start">От 10 человек</mat-hint>
+        <mat-hint align="end">До 100 человек</mat-hint>
+        <mat-error *ngIf="eventInfoForm.controls.countGuests.hasError('required') && eventInfoForm.controls.countGuests.touched" class="error">Обязательное поле</mat-error>
+        <mat-error *ngIf="eventInfoForm.controls.countGuests.hasError('min') && eventInfoForm.controls.countGuests.touched" class="error">Количество гостей меньше минимального</mat-error>
+        <mat-error *ngIf="eventInfoForm.controls.countGuests.hasError('max') && eventInfoForm.controls.countGuests.touched" class="error">Количество гостей больше максимального</mat-error>
+      </mat-form-field>
+    </div>
+    <!--Выбор даты-->
+    <div class="form-event__group">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Дата мероприятия</mat-label>
+        <input matInput required  [matDatepicker]="picker" [formControl]="eventInfoForm.controls.date">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="year" [startAt]="startDate" ></mat-datepicker>
+        <mat-error *ngIf="eventInfoForm.controls.date.hasError('required') && eventInfoForm.controls.date.touched" class="error">Обязательное поле</mat-error>
+      </mat-form-field>
+    </div>
+    <!--Выбор доп услуг-->
+    <div class="form-event__group">
+      <mat-form-field>
+        <mat-label>Дополнительные услуги</mat-label>
+        <mat-select [formControl]="eventInfoForm.controls.additionService" multiple>
+          <mat-select-trigger>
+            {{ getAdditionalServicesText() }}
+          </mat-select-trigger>
+          <mat-option *ngFor="let service of addServices" [value]="service.name">
+            {{ service.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!--Пожелания меню-->
+    <div class="form-event__group">
+      <mat-form-field>
+        <mat-label>Напишите пожелания по меню</mat-label>
+        <input type="text" matInput [formControl]="eventInfoForm.controls.menuWishes">
+      </mat-form-field>
+    </div>
+  </form>
+  <ng-content select="app-summary-info"></ng-content>
 </div>
 <ng-content select="app-material-submit-button"></ng-content>

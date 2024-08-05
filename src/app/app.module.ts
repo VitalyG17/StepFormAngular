@@ -4,14 +4,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {SummaryInfoComponent} from './components/summary-info/summary-info.component';
 import {PhoneMaskDirective} from './directives/phone-mask.directive';
 import {RubCurrencyPipe} from './pipes/rub-currency.pipe';
 import {NgOptimizedImage} from '@angular/common';
 import {EventFormatService} from './services/event-format.service';
 import {FormStatusService} from './services/form-status.service';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatButtonModule} from '@angular/material/button';
@@ -29,6 +29,16 @@ import {MatChipsModule} from '@angular/material/chips';
 import {IntegerOnlyDirective} from './directives/integer-only.directive';
 import {MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDateFormats} from '@angular/material/core';
 import {HeaderComponent} from './components/header/header.component';
+import {FormValueService} from './services/form-value.service';
+import {AngularFireModule} from '@angular/fire/compat';
+import {environment} from '../../environment';
+import {ToastrModule} from 'ngx-toastr';
+import {SnackbarService} from './services/snackbar.service';
+import {JsonInterceptorService} from './services/json-interceptor.service';
+import {VisibilityPageService} from './services/visibility-page.service';
+import {TimerResetComponent} from './components/timer-reset/timer-reset.component';
+import {FocusElementService} from './services/focus-elemet.service';
+import {CountdownService} from './services/countdown.service';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -53,6 +63,7 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MaterialFormContactsComponent,
     IntegerOnlyDirective,
     HeaderComponent,
+    TimerResetComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,12 +84,21 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MatButtonToggleModule,
     MatNativeDateModule,
     MatChipsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     EventFormatService,
+    FormValueService,
     FormStatusService,
+    SnackbarService,
+    VisibilityPageService,
+    FocusElementService,
+    CountdownService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS},
+    {provide: HTTP_INTERCEPTORS, useClass: JsonInterceptorService, multi: true},
   ],
   bootstrap: [AppComponent],
 })

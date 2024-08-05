@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, Validators} from '@angular/forms';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 
@@ -12,6 +12,7 @@ interface AboutInfoForm {
   selector: 'app-material-form-contacts',
   templateUrl: './material-form-contacts.component.html',
   styleUrls: ['./material-form-contacts.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialFormContactsComponent implements OnInit, OnDestroy, ControlValueAccessor {
   protected onTouched: (() => void) | undefined;
@@ -23,7 +24,7 @@ export class MaterialFormContactsComponent implements OnInit, OnDestroy, Control
   public readonly aboutInfoForm: FormGroup<AboutInfoForm> = new FormGroup<AboutInfoForm>({
     userName: new FormControl(null, Validators.required),
     phoneNumber: new FormControl(null, Validators.required),
-    email: new FormControl(null, Validators.email),
+    email: new FormControl(null, [Validators.email, Validators.required]),
   });
 
   public ngOnInit(): void {

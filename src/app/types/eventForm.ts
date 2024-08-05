@@ -19,3 +19,14 @@ export interface EventInfoFormValue {
 export type EventFormType = {
   [key in keyof EventInfoForm]: FormControl<EventInfoFormValue[key]>;
 };
+
+export interface FormData {
+  userName?: string | null;
+  phoneNumber?: string | null;
+  email?: string | null;
+  formEventName?: string | null;
+  countGuests?: number | null;
+  date?: Date | null;
+  additionService?: string[] | null;
+  menuWishes?: string | null;
+}

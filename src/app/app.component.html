@@ -1,6 +1,7 @@
  <div class="wrapper-info">
       <div class="container-info">
-        <mat-stepper [linear]="false" #stepper>
+        <app-timer-reset></app-timer-reset>
+        <mat-stepper [linear]="true" #stepper>
           <mat-step [stepControl]="eventForm.eventInfoForm" [editable]="isEditable">
             <ng-template matStepLabel>Мероприятие</ng-template>
             <app-material-form-event #eventForm>
@@ -12,7 +13,7 @@
                 [formEventName]="selectedEventName">
               </app-summary-info>
             </app-material-form-event>
-            <app-material-submit-button [title]="'Продолжить'" ></app-material-submit-button>
+            <app-material-submit-button [title]="'Продолжить'"></app-material-submit-button>
           </mat-step>
           <mat-step [stepControl]="contactsForm.aboutInfoForm" [editable]="isEditable">
             <ng-template matStepLabel>Контакты</ng-template>
@@ -25,7 +26,7 @@
                 [formEventName]="selectedEventName">
               </app-summary-info>
             </app-material-form-contacts>
-            <app-material-submit-button [title]="'Отправить заявку'"></app-material-submit-button>
+            <app-material-submit-button [title]="'Отправить заявку'" (click)="onSubmit()"></app-material-submit-button>
           </mat-step>
         </mat-stepper>
       </div>

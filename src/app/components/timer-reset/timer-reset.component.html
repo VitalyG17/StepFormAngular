@@ -1,0 +1,8 @@
+<div>
+  <h2>{{ timeLeft * 1000 | date:'mm:ss' }}</h2>
+  <div class="buttons">
+    <button [disabled]="isPressed" (click)="startCountdown(10)">Старт</button>
+    <button [disabled]="!isPressed" (click)="togglePauseResume()">{{ isPaused ? 'Продолжить' : 'Пауза' }}</button>
+    <button [disabled]="!isPressed" (click)="resetCountdown()">Сбросить</button>
+  </div>
+</div>
