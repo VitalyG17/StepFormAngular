@@ -35,6 +35,10 @@ import {environment} from '../../environment';
 import {ToastrModule} from 'ngx-toastr';
 import {SnackbarService} from './services/snackbar.service';
 import {JsonInterceptorService} from './services/json-interceptor.service';
+import {VisibilityPageService} from './services/visibility-page.service';
+import {TimerResetComponent} from './components/timer-reset/timer-reset.component';
+import {FocusElementService} from './services/focus-elemet.service';
+import {CountdownService} from './services/countdown.service';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -59,6 +63,7 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MaterialFormContactsComponent,
     IntegerOnlyDirective,
     HeaderComponent,
+    TimerResetComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,6 +93,9 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     FormValueService,
     FormStatusService,
     SnackbarService,
+    VisibilityPageService,
+    FocusElementService,
+    CountdownService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS},
     {provide: HTTP_INTERCEPTORS, useClass: JsonInterceptorService, multi: true},

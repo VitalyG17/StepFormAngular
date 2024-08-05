@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, inject, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  inject,
+  OnInit,
+} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {
   AbstractControl,
@@ -12,6 +20,8 @@ import {EventFormType, EventInfoFormValue} from '../../types/eventForm';
 import {ServerResponse} from '../../types/serverResponse';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {EventFormatService} from '../../services/event-format.service';
+import {VisibilityPageService} from '../../services/visibility-page.service';
+import {FocusElementService} from '../../services/focus-elemet.service';
 
 @Component({
   selector: 'app-material-form-event',
@@ -43,6 +53,10 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
   private readonly dataService: HttpService = inject(HttpService); // Сервис для получения информации о доп услугах
 
   private readonly eventFormatService: EventFormatService = inject(EventFormatService); // Cервис для получения форматов мероприятий
+
+  private readonly visibilityPageService: VisibilityPageService = inject(VisibilityPageService);
+
+  private readonly focusElementService: FocusElementService = inject(FocusElementService);
 
   private changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -114,6 +128,20 @@ export class MaterialFormEventComponent implements OnInit, ControlValueAccessor 
     }
 
     this.eventInfoForm.valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {});
+
+    this.visibilityPageService.focusSubject$.pipe(takeUntil(this.destroy$)).subscribe((isFocused: boolean = true) => {
+      console.log(`Фокус страницы: ${isFocused}`);
+    });
+
+    this.focusElementService.focusedElementSubject$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((focusedElement: ElementRef<HTMLElement> | null) => {
+        if (focusedElement) {
+          console.log('Фокус на элементе:', focusedElement.nativeElement);
+        } else {
+          console.log('Фокус на элементе отсутствует');
+        }
+      });
   }
 
   // Метод для получения текста для отображения в label select
